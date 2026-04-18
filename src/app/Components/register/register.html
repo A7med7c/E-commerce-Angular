@@ -1,1 +1,69 @@
-<p>register works!</p>
+<section class="p-2 my-2 rounded-4">
+    <h1 class="h2 text-main">Register Now:</h1>
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Name</label>
+            <input formControlName="name" type="name" class="form-control" id="name">
+            @if(registerForm.get('name')?.errors && registerForm.get('name')?.touched){
+            @if(registerForm.get('name')?.getError('required')){
+            <small class="text-danger">* Name is required</small>
+            }
+            @else if (registerForm.get('name')?.getError('minlength')) {
+            <small class="text-danger">* Minimum 3 characters</small>
+            }
+            @else if(registerForm.get('name')?.getError('maxlength')){
+            <small class="text-danger">*Maximum 20 characters</small>
+            }
+            }
+        </div>
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input formControlName="email" type="email" class="form-control" id="Email">
+            @if (registerForm.get('email')?.errors && registerForm.get('email')?.touched) {
+            @if(registerForm.get('email')?.getError('required')){
+            <small class="text-danger">*Email is required</small>
+            }
+            @else if(registerForm.get('email')?.getError('email')){
+            <small class="text-danger">*Invalid email format</small>
+            }
+            }
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input formControlName="password" type="password" class="form-control" id="Password">
+            @if (registerForm.get('password')?.errors && registerForm.get('password')?.touched) {
+            @if (registerForm.get('password')?.getError('required')) {
+            <small class="text-danger">*Password is required</small>
+            }
+            @else if (registerForm.get('password')?.getError('pattern')) {
+            <small class="text-danger">*Minimum 6 characters</small>
+            }
+            }
+        </div>
+        <div class="mb-3">
+            <label for="rePassword" class="form-label">Confirm Password</label>
+            <input formControlName="rePassword" type="password" class="form-control" id="Password">
+            @if (registerForm.get('rePassword')?.errors && registerForm.get('rePassword')?.touched) {
+            @if (registerForm.get('rePassword')?.getError('required')) {
+            <small class="text-danger">*Confirm password is required</small>
+            }
+            @else if (registerForm.get('rePassword')?.getError('pattern')) {
+            <small class="text-danger">*Minimum 6 characters </small>
+            }
+            }
+        </div>
+        <div class="mb-3">
+            <label for="Phone" class="form-label">Phone</label>
+            <input formControlName="phone" type="tel" class="form-control" id="Phone">
+            @if (registerForm.get('phone')?.errors && registerForm.get('phone')?.touched) {
+            @if (registerForm.get('phone')?.getError('required')) {
+            <small class="text-danger">*Phone is required</small>
+            }
+            @else if (registerForm.get('phone')?.getError('pattern')) {
+            <small class="text-danger">*Invalid Egyptian phone number</small>
+            }
+            }
+        </div>
+        <button type="submit" class="btn-main d-block ms-auto">Register</button>
+    </form>
+</section>

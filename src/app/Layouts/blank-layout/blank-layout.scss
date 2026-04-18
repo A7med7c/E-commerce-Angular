@@ -1,0 +1,8 @@
+// host : used to select component in css 
+// used to make footer at the bottom and dosent override the content 
+:host{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
