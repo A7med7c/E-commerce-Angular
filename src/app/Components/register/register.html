@@ -43,13 +43,8 @@
         <div class="mb-3">
             <label for="rePassword" class="form-label">Confirm Password</label>
             <input formControlName="rePassword" type="password" class="form-control" id="Password">
-            @if (registerForm.get('rePassword')?.errors && registerForm.get('rePassword')?.touched) {
-            @if (registerForm.get('rePassword')?.getError('required')) {
-            <small class="text-danger">*Confirm password is required</small>
-            }
-            @else if (registerForm.get('rePassword')?.getError('pattern')) {
-            <small class="text-danger">*Minimum 6 characters </small>
-            }
+            @if(registerForm.getError('mismatch')){
+            <small class="text-danger">Passwords do not match</small>
             }
         </div>
         <div class="mb-3">
@@ -60,7 +55,7 @@
             <small class="text-danger">*Phone is required</small>
             }
             @else if (registerForm.get('phone')?.getError('pattern')) {
-            <small class="text-danger">*Invalid Egyptian phone number</small>
+            <small class="text-danger">*Invalid phone number</small>
             }
             }
         </div>
