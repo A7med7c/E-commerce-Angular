@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../Core/Services/auth-service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -8,6 +10,11 @@ import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validator
   styleUrl: './register.scss',
 })
 export class Register {
+
+  private readonly _authService = inject(AuthService)
+  errorMessage = '';
+  isLoading = false;
+
   //registerForm : is the form group that represent object need to be sent to backend
   registerForm: FormGroup = new FormGroup({
     // each form control represent property in the json 
@@ -28,9 +35,23 @@ export class Register {
   }
 
 
-  register(): void {
+  submit(): void {
     if (this.registerForm.valid) {
-      console.log(this.registerForm)
+      this.isLoading = true;
+      this.errorMessage = '';
+
+      this._authService.register(this.registerForm.value).subscribe({
+        next: (res) => {
+          //redirection to login
+          this.isLoading = false;
+          console.log(res);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.isLoading = false;
+          this.errorMessage = err.error?.message;
+        }
+      });
+
     }
   }
 }

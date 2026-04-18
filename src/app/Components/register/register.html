@@ -1,9 +1,12 @@
 <section class="p-2 my-2 rounded-4">
     <h1 class="h2 text-main">Register Now:</h1>
-    <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <form [formGroup]="registerForm" (ngSubmit)="submit()">
+        @if (errorMessage) {
+        <div class="alert alert-danger">{{ errorMessage }}</div>
+        }
         <div class="mb-3">
             <label for="Name" class="form-label">Name</label>
-            <input formControlName="name" type="name" class="form-control" id="name">
+            <input formControlName="name" type="text" class="form-control" id="name">
             @if(registerForm.get('name')?.errors && registerForm.get('name')?.touched){
             @if(registerForm.get('name')?.getError('required')){
             <small class="text-danger">* Name is required</small>
@@ -42,7 +45,7 @@
         </div>
         <div class="mb-3">
             <label for="rePassword" class="form-label">Confirm Password</label>
-            <input formControlName="rePassword" type="password" class="form-control" id="Password">
+            <input formControlName="rePassword" type="password" class="form-control" id="rePassword">
             @if(registerForm.getError('mismatch')){
             <small class="text-danger">Passwords do not match</small>
             }
@@ -59,6 +62,10 @@
             }
             }
         </div>
-        <button type="submit" [disabled]="registerForm.invalid" class="btn-main d-block ms-auto">Register</button>
+        <button type="submit" [disabled]="registerForm.invalid || isLoading" class="btn-main d-block ms-auto">Register
+            @if (isLoading) {
+            <span><i class="fas fa-spin fa-spinner"></i></span>
+            }
+        </button>
     </form>
 </section>
