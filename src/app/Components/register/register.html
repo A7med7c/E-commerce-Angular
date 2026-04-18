@@ -59,6 +59,6 @@
             }
             }
         </div>
-        <button type="submit" class="btn-main d-block ms-auto">Register</button>
+        <button type="submit" [disabled]="registerForm.invalid" class="btn-main d-block ms-auto">Register</button>
     </form>
 </section>

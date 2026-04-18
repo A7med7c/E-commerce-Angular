@@ -29,6 +29,8 @@ export class Register {
 
 
   register(): void {
-    console.log(this.registerForm)
+    if (this.registerForm.valid) {
+      console.log(this.registerForm)
+    }
   }
 }
