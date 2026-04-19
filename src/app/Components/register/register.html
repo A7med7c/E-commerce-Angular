@@ -33,6 +33,7 @@
                 [ngClass]="{
                 'is-valid': !registerForm.get('email')?.errors && (registerForm.get('email')?.touched||registerForm.get('email')?.dirty),
                 'is-invalid': registerForm.get('email')?.errors && (registerForm.get('email')?.touched||registerForm.get('email')?.dirty)}"
+                
                 formControlName="email" type="email" class="form-control" id="Email">
             @if (registerForm.get('email')?.errors && (registerForm.get('email')?.touched) ||
             registerForm.get('email')?.dirty) {

@@ -1,1 +1,54 @@
-<p>login works!</p>
+<section class="p-2 my-2 rounded-4">
+    <form [formGroup]="loginForm" (ngSubmit)="submit()">
+        @if (errorMessage) {
+        <div class="alert alert-danger">{{ errorMessage }}</div>
+        }
+        @if(success){
+        <div class="alert alert-success">Account created successfully</div>
+        }
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input
+                [ngClass]="{
+                'is-valid': !loginForm.get('email')?.errors && (loginForm.get('email')?.touched||loginForm.get('email')?.dirty),
+                'is-invalid': loginForm.get('email')?.errors && (loginForm.get('email')?.touched||loginForm.get('email')?.dirty)}"
+                formControlName="email" type="email" class="form-control" id="Email">
+            @if (loginForm.get('email')?.errors && (loginForm.get('email')?.touched) ||
+            loginForm.get('email')?.dirty) {
+            @if(loginForm.get('email')?.getError('required')){
+            <small class="text-danger">*Email is required</small>
+            }
+            @else if(loginForm.get('email')?.getError('email')){
+            <small class="text-danger">*Invalid email format</small>
+            }
+            }
+        </div>
+        <div class="mb-3 position-relative">
+            <label for="password" class="form-label">Password</label>
+            <input formControlName="password" [type]="showPassword?'text':'password'" class="form-control" id="Email"
+                [ngClass]="{
+                'is-valid': !loginForm.get('password')?.errors && (loginForm.get('password')?.touched ||
+            loginForm.get('password')?.dirty),
+                'is-invalid': loginForm.get('password')?.errors && (loginForm.get('password')?.touched ||
+            loginForm.get('password')?.dirty)
+            }">
+            <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()"
+                style="position:absolute; right:30px; top:42px; cursor:pointer;"></i>
+
+            @if (loginForm.get('password')?.errors && (loginForm.get('password')?.touched ||
+            loginForm.get('password')?.dirty)) {
+            @if (loginForm.get('password')?.getError('required')) {
+            <small class="text-danger">*Password is required</small>
+            }
+            @else if (loginForm.get('password')?.getError('pattern')) {
+            <small class="text-danger">*Minimum 6 characters</small>
+            }
+            }
+        </div>
+        <button type="submit" class="btn-main d-block ms-auto">Login
+            @if (isLoading) {
+            <span><i class="fas fa-spin fa-spinner"></i></span>
+            }
+        </button>
+    </form>
+</section>

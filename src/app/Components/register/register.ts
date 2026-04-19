@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../Core/Services/auth-service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -16,6 +16,7 @@ export class Register {
   private readonly _authService = inject(AuthService)
   private readonly _formBuilder = inject(FormBuilder)
   private readonly _router = inject(Router)
+  private readonly _cdr = inject(ChangeDetectorRef)
 
   errorMessage: string = '';
   isLoading: boolean = false;
@@ -77,6 +78,7 @@ export class Register {
           this.isLoading = false;
           this.success = false;
           this.errorMessage = err.error?.message;
+          this._cdr.detectChanges();
         }
       });
 
