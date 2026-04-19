@@ -40,6 +40,7 @@ export class Register {
 
 
   //custom validator 
+
   confirmPassword(group: AbstractControl) {
     const password = group.get('password')?.value;
     const confirm = group.get('rePassword')?.value;
@@ -49,6 +50,7 @@ export class Register {
 
 
   submit(): void {
+
     if (this.registerForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
@@ -65,6 +67,9 @@ export class Register {
         }
       });
 
+    }
+    else {
+      this.registerForm.markAllAsTouched();
     }
   }
 }

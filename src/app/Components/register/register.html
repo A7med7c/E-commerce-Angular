@@ -62,14 +62,13 @@
             <label for="rePassword" class="form-label">Confirm Password</label>
             <input
                 [ngClass]="{
-                'is-valid': !registerForm.get('rePassword')?.errors && (registerForm.get('rePassword')?.touched||registerForm.get('rePassword')?.dirty),
-                'is-invalid': registerForm.get('rePassword')?.errors && (registerForm.get('rePassword')?.touched||registerForm.get('rePassword')?.dirty)}"
+                'is-valid': registerForm.get('rePassword')?.value && !registerForm.getError('mismatch') && (registerForm.get('rePassword')?.touched||registerForm.get('rePassword')?.dirty),
+                'is-invalid': registerForm.get('rePassword')?.value && registerForm.getError('mismatch') && (registerForm.get('rePassword')?.touched||registerForm.get('rePassword')?.dirty)}"
                 formControlName="rePassword" type="password" class="form-control" id="rePassword">
-            @if (registerForm.get('rePassword')?.errors && (registerForm.get('rePassword')?.touched
-            ||registerForm.get('rePassword')?.dirty )) {
-            @if(registerForm.getError('mismatch') ){
+            @if(registerForm.getError('mismatch') && registerForm.get('rePassword')?.value &&
+            (registerForm.get('rePassword')?.touched||registerForm.get('rePassword')?.dirty)){
             <small class="text-danger">Passwords do not match</small>
-            }}
+            }
         </div>
         <div class="mb-3">
             <label for="Phone" class="form-label">Phone</label>
@@ -88,7 +87,7 @@
             }
             }
         </div>
-        <button type="submit" [disabled]="registerForm.invalid || isLoading" class="btn-main d-block ms-auto">Register
+        <button type="submit" class="btn-main d-block ms-auto">Register
             @if (isLoading) {
             <span><i class="fas fa-spin fa-spinner"></i></span>
             }
