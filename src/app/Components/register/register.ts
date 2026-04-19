@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModu
 import { AuthService } from '../../Core/Services/auth-service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgClass } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -14,9 +15,12 @@ export class Register {
 
   private readonly _authService = inject(AuthService)
   private readonly _formBuilder = inject(FormBuilder)
+  private readonly _router = inject(Router)
 
-  errorMessage = '';
-  isLoading = false;
+  errorMessage: string = '';
+  isLoading: boolean = false;
+  success: boolean = false;
+  showPassword: boolean = false;
 
 
   // form builder syntax -> recommended
@@ -48,27 +52,35 @@ export class Register {
     return password === confirm ? null : { mismatch: true };
   }
 
-
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
   submit(): void {
-
     if (this.registerForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
+      this.success = false;
 
       this._authService.register(this.registerForm.value).subscribe({
-        next: (res) => {
-          //redirection to login
+        next: (res: any) => {
           this.isLoading = false;
-          console.log(res);
+
+          if (res.message === 'success') {
+            this.success = true;
+            this.registerForm.reset();
+            setTimeout(() => {
+              this._router.navigate(['/login']);
+            }, 2000);
+          }
         },
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
+          this.success = false;
           this.errorMessage = err.error?.message;
         }
       });
 
-    }
-    else {
+    } else {
       this.registerForm.markAllAsTouched();
     }
   }

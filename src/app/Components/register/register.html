@@ -4,6 +4,9 @@
         @if (errorMessage) {
         <div class="alert alert-danger">{{ errorMessage }}</div>
         }
+        @if(success){
+        <div class="alert alert-success">Account created successfully</div>
+        }
         <div class="mb-3">
             <label for="Name" class="form-label">Name</label>
             <input
@@ -41,13 +44,17 @@
             }
             }
         </div>
-        <div class="mb-3">
+        <div class="mb-3 position-relative">
             <label for="password" class="form-label">Password</label>
             <input
                 [ngClass]="{
                 'is-valid': !registerForm.get('password')?.errors && (registerForm.get('password')?.touched||registerForm.get('password')?.dirty),
                 'is-invalid': registerForm.get('password')?.errors && (registerForm.get('password')?.touched||registerForm.get('password')?.dirty)}"
-                formControlName="password" type="password" class="form-control" id="Password">
+                formControlName="password" [type]="showPassword ? 'text':'password'" class="form-control" id="Password">
+            <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()"
+                style="position:absolute; right:30px; top:42px; cursor:pointer;"></i>
+
+
             @if (registerForm.get('password')?.errors && (registerForm.get('password')?.touched
             ||registerForm.get('password')?.dirty )) {
             @if (registerForm.get('password')?.getError('required')) {
@@ -58,7 +65,7 @@
             }
             }
         </div>
-        <div class="mb-3">
+        <div class="mb-3 position-relative">
             <label for="rePassword" class="form-label">Confirm Password</label>
             <input
                 [ngClass]="{
@@ -68,7 +75,8 @@
             @if(registerForm.getError('mismatch') && registerForm.get('rePassword')?.value &&
             (registerForm.get('rePassword')?.touched||registerForm.get('rePassword')?.dirty)){
             <small class="text-danger">Passwords do not match</small>
-            }
+            }.<i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()"
+                style="position:absolute; right:30px; top:42px; cursor:pointer;"></i>
         </div>
         <div class="mb-3">
             <label for="Phone" class="form-label">Phone</label>
