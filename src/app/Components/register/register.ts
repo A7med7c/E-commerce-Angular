@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../Core/Services/auth-service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgClass } from '@angular/common';
@@ -13,18 +13,30 @@ import { NgClass } from '@angular/common';
 export class Register {
 
   private readonly _authService = inject(AuthService)
+  private readonly _formBuilder = inject(FormBuilder)
+
   errorMessage = '';
   isLoading = false;
 
-  //registerForm : is the form group that represent object need to be sent to backend
-  registerForm: FormGroup = new FormGroup({
-    // each form control represent property in the json 
-    name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-    email: new FormControl(null, [Validators.required, Validators.email]),
-    password: new FormControl(null, [Validators.required, Validators.pattern(/^\w{6,}$/)]),
-    rePassword: new FormControl(null),
-    phone: new FormControl(null, [Validators.required, Validators.pattern(/^01[0125][0-9]{8}$/)]),
-  }, this.confirmPassword)
+
+  // form builder syntax -> recommended
+  registerForm: FormGroup = this._formBuilder.group({
+    name: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+    email: [null, [Validators.required, Validators.email]],
+    password: [null, [Validators.required, Validators.pattern(/^\w{6,}$/)]],
+    rePassword: [null],
+    phone: [null, [Validators.required, Validators.pattern(/^01[0125][0-9]{8}$/)]],
+  }, { validators: this.confirmPassword })
+
+  // //registerForm : is the form group that represent object need to be sent to backend
+  // registerForm: FormGroup = new FormGroup({
+  //   // each form control represent property in the json 
+  //   name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
+  //   email: new FormControl(null, [Validators.required, Validators.email]),
+  //   password: new FormControl(null, [Validators.required, Validators.pattern(/^\w{6,}$/)]),
+  //   rePassword: new FormControl(null),
+  //   phone: new FormControl(null, [Validators.required, Validators.pattern(/^01[0125][0-9]{8}$/)]),
+  // }, this.confirmPassword)
 
 
   //custom validator 
