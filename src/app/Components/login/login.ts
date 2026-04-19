@@ -35,21 +35,30 @@ export class Login {
   submit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;
+      this.errorMessage = '';
+      this.success = false;
 
       this._authService.login(this.loginForm.value).subscribe({
         next: (res: any) => {
           this.isLoading = false;
           if (res.message === 'success') {
             this.success = true;
+            this.loginForm.reset();
             setTimeout(() => {
+              //save token in local storage 
+              localStorage.setItem('token', res.token);
+              //decode data form token 
+              this._authService.saveUserDate();
+              console.log(res)
               this._router.navigate(['/home']);
             }, 1000);
           }
-          this.isLoading = false;
+          // this.isLoading = false;
         },
         error: (err: HttpErrorResponse) => {
-          this.errorMessage = err.error?.message;
           this.isLoading = false;
+          this.success = false;
+          this.errorMessage = err.error?.message;
           this._cdr.detectChanges();
         }
       });
