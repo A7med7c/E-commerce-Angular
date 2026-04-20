@@ -1,6 +1,7 @@
 import { environment } from './../Environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 
@@ -11,6 +12,8 @@ export class AuthService {
 
 
   private readonly _httpClient = inject(HttpClient)
+  private readonly _router = inject(Router)
+
   userData: any = null;
 
   register(data: object): Observable<any> {
@@ -24,7 +27,13 @@ export class AuthService {
   saveUserDate(): void {
     if (localStorage.getItem('token') !== null) {
       this.userData = jwtDecode(localStorage.getItem('token')!)
-      console.log("user data : ", this.userData);
     }
+  }
+
+  logOut(): void {
+    localStorage.removeItem('token');
+    this.userData = null;
+    // if there is endpoint in backend that remove token call it 
+    this._router.navigate(['/login']);
   }
 }
