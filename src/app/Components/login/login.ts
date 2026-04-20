@@ -49,7 +49,6 @@ export class Login {
               localStorage.setItem('token', res.token);
               //decode data form token 
               this._authService.saveUserDate();
-              console.log(res)
               this._router.navigate(['/home']);
             }, 1000);
           }

@@ -1,3 +1,3 @@
 export const environment = {
-    baseUrl: 'https://ecommerce.routemisr.com/api/v1/auth'
+    baseUrl: 'https://ecommerce.routemisr.com/api/v1'
 }

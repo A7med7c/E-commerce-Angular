@@ -17,11 +17,11 @@ export class AuthService {
   userData: any = null;
 
   register(data: object): Observable<any> {
-    return this._httpClient.post(`${environment.baseUrl}/signup`, data);
+    return this._httpClient.post(`${environment.baseUrl}/auth/signup`, data);
   }
 
   login(data: object): Observable<any> {
-    return this._httpClient.post(`${environment.baseUrl}/signin`, data);
+    return this._httpClient.post(`${environment.baseUrl}/auth/signin`, data);
   }
 
   saveUserDate(): void {
