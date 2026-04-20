@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../Core/Services/auth-service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgClass } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
-export class Register {
+export class Register implements OnDestroy {
 
   private readonly _authService = inject(AuthService)
   private readonly _formBuilder = inject(FormBuilder)
@@ -22,6 +23,8 @@ export class Register {
   isLoading: boolean = false;
   success: boolean = false;
   showPassword: boolean = false;
+  productsSubscribtion!: Subscription
+
 
 
   // form builder syntax -> recommended
@@ -62,7 +65,7 @@ export class Register {
       this.errorMessage = '';
       this.success = false;
 
-      this._authService.register(this.registerForm.value).subscribe({
+      this.productsSubscribtion = this._authService.register(this.registerForm.value).subscribe({
         next: (res: any) => {
           this.isLoading = false;
 
@@ -85,5 +88,10 @@ export class Register {
     } else {
       this.registerForm.markAllAsTouched();
     }
+  }
+
+  // called in exit the component so we make unsubscribe here 
+  ngOnDestroy(): void {
+    this.productsSubscribtion?.unsubscribe();
   }
 }

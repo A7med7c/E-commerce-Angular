@@ -1,9 +1,10 @@
 import { NgClass } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../Core/Services/auth-service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login {
+export class Login implements OnDestroy {
   private readonly _FormBuilder = inject(FormBuilder)
   private readonly _authService = inject(AuthService)
   private readonly _router = inject(Router)
@@ -22,6 +23,7 @@ export class Login {
   isLoading: boolean = false;
   errorMessage: string = '';
   success: boolean = false;
+  productsSubscribtion!: Subscription
 
 
   loginForm: FormGroup = this._FormBuilder.group({
@@ -38,7 +40,7 @@ export class Login {
       this.errorMessage = '';
       this.success = false;
 
-      this._authService.login(this.loginForm.value).subscribe({
+      this.productsSubscribtion = this._authService.login(this.loginForm.value).subscribe({
         next: (res: any) => {
           this.isLoading = false;
           if (res.message === 'success') {
@@ -65,5 +67,9 @@ export class Login {
     else {
       this.loginForm.markAllAsTouched();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.productsSubscribtion?.unsubscribe();
   }
 }
