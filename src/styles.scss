@@ -10,9 +10,14 @@
   --font-family: "Encode Sans Expanded", sans-serif;
   --rating-color: #ffc908;
 }
-
 body {
   font-family: var(--font-family) !important;
+background: linear-gradient(
+  135deg,
+  #f8faf9,
+  var(--light-color),
+  #e8f5e9
+);
 }
 
 .nav-link {

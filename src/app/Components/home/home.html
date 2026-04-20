@@ -6,7 +6,7 @@
         @for (product of productList.slice(0, 12); track product.id) {
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
 
-            <div class="card  h-100 shadow-sm border-0 p-2">
+            <div class="product card  h-100 shadow-sm border-0 p-2">
 
                 <img [src]="product.imageCover" class="w-100 object-fit-cover rounded" style="height: 220px;"
                     [alt]="product.title">
@@ -28,10 +28,10 @@
                         </span>
 
                         <div>
-                            <i class="fas fa-star text-warning"></i>
-                            <span class="text-muted ms-1">
-                                {{ product.ratingsAverage }}
-                            </span>
+                            <div class="d-flex align-items-center gap-1">
+                                <div class="stars" [style.--rating]="product.ratingsAverage"></div>
+                                <span class="text-muted small">{{ product.ratingsAverage }}</span>
+                            </div>
                         </div>
 
                     </div>

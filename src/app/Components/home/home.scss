@@ -1,1 +1,26 @@
+.stars {
+  --rating: 0;
+  --star-size: 18px;
+  --star-color: #ccc;
+  --star-fill: #ffc107;
 
+  font-size: var(--star-size);
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  letter-spacing: 2px;
+
+  background: linear-gradient(
+    90deg,
+    var(--star-fill) calc(var(--rating) / 5 * 100%),
+    var(--star-color) calc(var(--rating) / 5 * 100%)
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  display: inline-block;
+}
+
+.stars::before {
+  content: "★★★★★";
+}
