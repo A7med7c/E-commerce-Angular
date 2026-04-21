@@ -1,3 +1,59 @@
+<!-- Static Slider -->
+<section>
+    <div class="row g-0">
+        <div class="col-md-10 ">
+            <owl-carousel-o [options]="customOptionsMain">
+                <ng-template carouselSlide>
+                    <img src="./images/img1.avif" class="w-100" height="300px" alt="">
+                </ng-template>
+                <ng-template carouselSlide>
+                    <img src="./images/img2.avif" class="w-100" height="300px" alt="">
+                </ng-template>
+                <ng-template carouselSlide>
+                    <img src="./images/img3.avif" height="300px" alt="">
+                </ng-template>
+                <ng-template carouselSlide>
+                    <img src="./images/img4.avif" class="w-100" height="300px" alt="">
+                </ng-template>
+                <ng-template carouselSlide>
+                    <img src="./images/img5.avif" class="w-100" height="300px" alt="">
+                </ng-template>
+                <ng-template carouselSlide>
+                    <img src="./images/img6.avif" class="w-100" height="300px" alt="">
+                </ng-template>
+                <ng-template carouselSlide>
+                    <img src="./images/img7.avif" class="w-100" height="300px" alt="">
+                </ng-template>
+            </owl-carousel-o>
+        </div>
+        <div class="col-md-2">
+            <div>
+                <img src="./images/slider-image-3.jpeg" height="150px" class="w-100" alt="">
+                <img src="./images/slider-image-2.jpeg" height="150px" class="w-100" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Categories -->
+<section class="my-2">
+    <h2>Popular Categories</h2>
+    <owl-carousel-o [options]="customOptionsCategory">
+
+        @for (category of categoryList; track category._id) {
+        <ng-template carouselSlide [id]="category._id">
+            <div>
+                <img [src]="category.image" height="250px" [alt]="category.name">
+                <h3 class="h6 text-main mt-2">{{category.name}}</h3>
+            </div>
+        </ng-template>
+        }
+
+    </owl-carousel-o>
+</section>
+
+<!-- Products -->
 <section class="home-products py-3">
     <h4 class="fw-bold mb-4">Popular Products</h4>
 
