@@ -2,13 +2,13 @@ import { NgClass } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../Core/Services/auth-service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -30,6 +30,7 @@ export class Login implements OnDestroy {
     email: [null, [Validators.required, Validators.email]],
     password: [null, [Validators.required, Validators.pattern(/^\w{6,}$/)]]
   })
+
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
@@ -60,6 +61,7 @@ export class Login implements OnDestroy {
           this.isLoading = false;
           this.success = false;
           this.errorMessage = err.error?.message;
+          console.log(err)
           this._cdr.detectChanges();
         }
       });

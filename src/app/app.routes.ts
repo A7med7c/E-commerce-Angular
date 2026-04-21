@@ -14,6 +14,7 @@ import { NotFound } from './Components/not-found/not-found';
 import { authGuard } from './Core/Guards/auth-guard';
 import { isLoggedGuard } from './Core/Guards/is-logged-guard';
 import { Details } from './Components/details/details';
+import { ForgetPassword } from './Components/forget-password/forget-password';
 
 export const routes: Routes = [
     {
@@ -24,6 +25,7 @@ export const routes: Routes = [
             { path: "", redirectTo: "login", pathMatch: "full" },
             { path: "login", component: Login },
             { path: "register", component: Register },
+            { path: "forgetpassword", component: ForgetPassword },
         ],
     },
     {

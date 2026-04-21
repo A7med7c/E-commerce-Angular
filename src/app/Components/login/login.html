@@ -25,7 +25,7 @@
         </div>
         <div class="mb-3 position-relative">
             <label for="password" class="form-label">Password</label>
-            <input formControlName="password" [type]="showPassword?'text':'password'" class="form-control" id="Email"
+            <input formControlName="password" [type]="showPassword?'text':'password'" class="form-control" id="password"
                 [ngClass]="{
                 'is-valid': !loginForm.get('password')?.errors && (loginForm.get('password')?.touched ||
             loginForm.get('password')?.dirty),
@@ -45,10 +45,14 @@
             }
             }
         </div>
-        <button type="submit" class="btn-main d-block ms-auto">Login
-            @if (isLoading) {
-            <span><i class="fas fa-spin fa-spinner"></i></span>
-            }
-        </button>
+        <div class="d-flex align-items-center justify-content-between">
+            <a [routerLink]="['/forgetpassword']" class="text-decoration-underline link-primary">Forget Password</a>
+            <button type="submit" class="btn-main ">Login
+                @if (isLoading) {
+                <span><i class="fas fa-spin fa-spinner"></i></span>
+                }
+            </button>
+        </div>
+
     </form>
 </section>

@@ -36,4 +36,17 @@ export class AuthService {
     // if there is endpoint in backend that remove token call it 
     this._router.navigate(['/login']);
   }
+
+  sendCode(data: object): Observable<any> {
+    return this._httpClient.post(`${environment.baseUrl}/auth/forgotPasswords`, data)
+  }
+
+  codeVerification(data: object): Observable<any> {
+    return this._httpClient.post(`${environment.baseUrl}/auth/verifyResetCode`, data)
+  }
+
+  setNewPassword(data: object): Observable<any> {
+    return this._httpClient.put(`${environment.baseUrl}/auth/resetPassword`, data)
+  }
+
 }
