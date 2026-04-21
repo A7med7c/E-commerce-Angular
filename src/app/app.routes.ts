@@ -13,6 +13,7 @@ import { NotFound } from './Components/not-found/not-found';
 
 import { authGuard } from './Core/Guards/auth-guard';
 import { isLoggedGuard } from './Core/Guards/is-logged-guard';
+import { Details } from './Components/details/details';
 
 export const routes: Routes = [
     {
@@ -35,6 +36,7 @@ export const routes: Routes = [
             { path: "categories", component: Category },
             { path: "cart", component: Cart },
             { path: "brands", component: Brand },
+            { path: "details/:id", component: Details },
         ],
     },
     { path: "**", component: NotFound },

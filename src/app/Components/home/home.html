@@ -1,103 +1,93 @@
 <!-- Static Slider -->
 <section>
     <div class="row g-0">
-        <div class="col-md-10 ">
+
+        <div class="col-12 col-md-10">
             <owl-carousel-o [options]="customOptionsMain">
                 <ng-template carouselSlide>
-                    <img src="./images/img1.avif" class="w-100" height="300px" alt="">
+                    <img src="./images/img1.avif" class="w-100 slider-img" alt="">
                 </ng-template>
                 <ng-template carouselSlide>
-                    <img src="./images/img2.avif" class="w-100" height="300px" alt="">
+                    <img src="./images/img2.avif" class="w-100 slider-img" alt="">
                 </ng-template>
                 <ng-template carouselSlide>
-                    <img src="./images/img3.avif" height="300px" alt="">
+                    <img src="./images/img3.avif" class="w-100 slider-img" alt="">
                 </ng-template>
                 <ng-template carouselSlide>
-                    <img src="./images/img4.avif" class="w-100" height="300px" alt="">
+                    <img src="./images/img4.avif" class="w-100 slider-img" alt="">
                 </ng-template>
                 <ng-template carouselSlide>
-                    <img src="./images/img5.avif" class="w-100" height="300px" alt="">
+                    <img src="./images/img5.avif" class="w-100 slider-img" alt="">
                 </ng-template>
                 <ng-template carouselSlide>
-                    <img src="./images/img6.avif" class="w-100" height="300px" alt="">
+                    <img src="./images/img6.avif" class="w-100 slider-img" alt="">
                 </ng-template>
                 <ng-template carouselSlide>
-                    <img src="./images/img7.avif" class="w-100" height="300px" alt="">
+                    <img src="./images/img7.avif" class="w-100 slider-img" alt="">
                 </ng-template>
             </owl-carousel-o>
         </div>
-        <div class="col-md-2">
-            <div>
-                <img src="./images/slider-image-3.jpeg" height="150px" class="w-100" alt="">
-                <img src="./images/slider-image-2.jpeg" height="150px" class="w-100" alt="">
-            </div>
+
+        <div class="col-12 col-md-2 d-flex flex-md-column">
+            <img src="./images/slider-image-3.jpeg" class="w-100 side-img" alt="">
+            <img src="./images/slider-image-2.jpeg" class="w-100 side-img" alt="">
         </div>
+
     </div>
 </section>
 
-
 <!-- Categories -->
 <section class="my-2">
-    <h2>Popular Categories</h2>
-    <owl-carousel-o [options]="customOptionsCategory">
+    <h2 class="mb-3">Popular Categories</h2>
 
+    @if (categoryLoaded) {
+    <owl-carousel-o [options]="customOptionsCategory">
         @for (category of categoryList; track category._id) {
-        <ng-template carouselSlide [id]="category._id">
-            <div>
-                <img [src]="category.image" height="250px" [alt]="category.name">
+        <ng-template carouselSlide>
+            <div class="category-card text-center">
+                <img [src]="category.image" [alt]="category.name" class="category-img">
                 <h3 class="h6 text-main mt-2">{{category.name}}</h3>
             </div>
         </ng-template>
         }
-
     </owl-carousel-o>
+    }
+
 </section>
 
 <!-- Products -->
 <section class="home-products py-3">
     <h4 class="fw-bold mb-4">Popular Products</h4>
 
+    @if (productLoaded) {
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-3">
 
-        @for (product of productList.slice(0, 12); track product.id) {
+        @for (product of productList.slice(0, 12); track product._id) {
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-
-            <div class="product card  h-100 shadow-sm border-0 p-2">
-
-                <img [src]="product.imageCover" class="w-100 object-fit-cover rounded" style="height: 220px;"
-                    [alt]="product.title">
-
-                <div class="mt-2">
-
-                    <h6 class="small text-success mb-1">
-                        {{ product.category.name }}
-                    </h6>
-
-                    <h6 class="mb-2">
-                        {{ product.title.split(' ', 2).join(' ') }}
-                    </h6>
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <span class="fw-bold">
-                            {{ product.price }} EGP
-                        </span>
-
-                        <div>
-                            <div class="d-flex align-items-center gap-1">
-                                <div class="stars" [style.--rating]="product.ratingsAverage"></div>
-                                <span class="text-muted small">{{ product.ratingsAverage }}</span>
+            <div class="product card h-100 shadow-sm border-0 p-2">
+                <div [routerLink]="['/details', product.id]" class="cr">
+                    <img [src]="product.imageCover" class="w-100 object-fit-cover rounded" style="height: 220px;"
+                        [alt]="product.title">
+                    <div class="mt-2">
+                        <h6 class="small text-success mb-1">{{ product.category.name }}</h6>
+                        <h6 class="mb-2">{{ product.title.split(' ', 2).join(' ') }}</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold">{{ product.price }} EGP</span>
+                            <div>
+                                <div class="d-flex align-items-center gap-1">
+                                    <div class="stars" [style.--rating]="product.ratingsAverage"></div>
+                                    <span class="text-muted small">{{ product.ratingsAverage }}</span>
+                                </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
-
                 <button class="btn btn-main w-100">Add To Cart</button>
             </div>
         </div>
         }
 
     </div>
+    }
+
 </section>

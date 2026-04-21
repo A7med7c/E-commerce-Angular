@@ -1,34 +1,32 @@
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProductService } from './../../Core/Services/product-service';
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnInit, DestroyRef, ChangeDetectionStrategy } from '@angular/core';  // ✅
 import { IProducts } from '../../Core/Interfaces/iproducts';
-import { Subscription } from 'rxjs';
 import { CategoryService } from '../../Core/Services/category-service';
 import { ICategory } from '../../Core/Interfaces/icategory';
 import { OwlOptions } from 'ngx-owl-carousel-o';
-
+import { RouterLink } from "@angular/router";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
-  imports: [CarouselModule],
+  imports: [CarouselModule, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush   // ✅ add this
 })
-export class Home implements OnInit, OnDestroy {
+export class Home implements OnInit {
 
-
-  //Injections
   private readonly _productService = inject(ProductService)
   private readonly _categoryService = inject(CategoryService)
-  private readonly _cdr = inject(ChangeDetectorRef)
+  private readonly _destroyRef = inject(DestroyRef)
 
-  //properties
   productList: IProducts[] = []
   categoryList: ICategory[] = []
-  productsSubscribtion!: Subscription
+  categoryLoaded = false;
+  productLoaded = false;
 
-  // Slider Options 
   customOptionsCategory: OwlOptions = {
     loop: true,
     mouseDrag: true,
@@ -41,13 +39,15 @@ export class Home implements OnInit, OnDestroy {
     navSpeed: 700,
     navText: ['<i class="fa-duotone fa-solid fa-angles-right"></i>', '<i class="fa-duotone fa-solid fa-angles-left"></i>'],
     responsive: {
-      0: { items: 1 },
-      400: { items: 2 },
-      740: { items: 3 },
-      940: { items: 5 }
+      0: { items: 2 },
+      576: { items: 3 },
+      768: { items: 4 },
+      992: { items: 5 },
+      1200: { items: 6 }
     },
     nav: true
   };
+
   customOptionsMain: OwlOptions = {
     loop: true,
     mouseDrag: true,
@@ -55,43 +55,38 @@ export class Home implements OnInit, OnDestroy {
     pullDrag: false,
     dots: true,
     autoplay: true,
-    autoplayMouseleaveTimeout: 600,
+    autoplayTimeout: 2000,
     autoplayHoverPause: true,
     navSpeed: 700,
     navText: ['', ''],
-    items: 1,
-    nav: false
+    nav: false,
+    responsive: {
+      0: { items: 1 },
+      576: { items: 1 },
+      768: { items: 1 },
+      992: { items: 1 }
+    }
   };
 
-
-
-  // called in init the component
   ngOnInit(): void {
-    this.productsSubscribtion = this._productService.getAllProducts().subscribe({
-      next: (res) => {
-        this.productList = res.data;
-        this._cdr.detectChanges();
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err);
-        this._cdr.detectChanges();
-      }
-    })
+    this._productService.getAllProducts()
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.productList = res.data;
+          this.productLoaded = true;
+        },
+        error: (err: HttpErrorResponse) => console.log(err)
+      });
 
-    this._categoryService.getAllCategories().subscribe({
-      next: (res) => {
-        // console.log(res.data);
-        this.categoryList = res.data;
-        console.log(this.categoryList)
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err)
-      }
-    })
-  }
-
-  // called in exit the component so we make unsubscribe here 
-  ngOnDestroy(): void {
-    this.productsSubscribtion?.unsubscribe();
+    this._categoryService.getAllCategories()
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.categoryList = res.data;
+          this.categoryLoaded = true;
+        },
+        error: (err: HttpErrorResponse) => console.log(err)
+      });
   }
 }

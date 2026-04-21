@@ -1,0 +1,45 @@
+@if (productDetails) {
+<section class="py-4">
+    <h2 class="text-main text-center mb-4 fw-bold">Product Details</h2>
+
+    <div class="row align-items-center g-4">
+        <div class="col-md-3">
+            <div class="p-2 border rounded-3 shadow-sm bg-white">
+                <img [src]="productDetails.imageCover" class="w-100 rounded-3" [alt]="productDetails.title">
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="p-3">
+
+                <h2 class="fw-semibold mb-2">
+                    {{productDetails.title}}
+                </h2>
+
+                <p class="text-muted mb-3" style="line-height: 1.6;">
+                    {{productDetails.description}}
+                </p>
+
+                <h3 class="h6 text-main mb-3">
+                    {{productDetails.category.name}}
+                </h3>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">{{ productDetails.price }} EGP</span>
+                    <div>
+                        <div class="d-flex align-items-center gap-1">
+                            <div class="stars" [style.--rating]="productDetails.ratingsAverage"></div>
+                            <span class="text-muted small">{{ productDetails.ratingsAverage }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-main w-100 py-2 fw-semibold shadow-sm">
+                    Add To Cart
+                </button>
+
+            </div>
+        </div>
+    </div>
+</section>
+}
