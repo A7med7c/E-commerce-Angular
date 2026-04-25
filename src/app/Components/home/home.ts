@@ -1,7 +1,7 @@
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProductService } from './../../Core/Services/product-service';
-import { Component, inject, OnInit, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, OnInit, DestroyRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { IProducts } from '../../Core/Interfaces/iproducts';
 import { CategoryService } from '../../Core/Services/category-service';
 import { ICategory } from '../../Core/Interfaces/icategory';
@@ -10,6 +10,8 @@ import { RouterLink } from "@angular/router";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SearchPipe } from '../../Core/Pipes/search-pipe';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { CartService } from '../../Core/Services/cart-service';
 
 @Component({
   selector: 'app-home',
@@ -18,10 +20,12 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Home implements OnInit {
+export class Home implements OnInit, OnDestroy {
+
 
   private readonly _productService = inject(ProductService)
   private readonly _categoryService = inject(CategoryService)
+  private readonly _cartService = inject(CartService)
   private readonly _destroyRef = inject(DestroyRef)
 
   productList: IProducts[] = []
@@ -29,6 +33,7 @@ export class Home implements OnInit {
   categoryLoaded = false;
   productLoaded = false;
   searchText: string = ''
+  productSubs!: Subscription
 
   customOptionsCategory: OwlOptions = {
     loop: true,
@@ -72,7 +77,7 @@ export class Home implements OnInit {
   };
 
   ngOnInit(): void {
-    this._productService.getAllProducts()
+    this.productSubs = this._productService.getAllProducts()
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (res) => {
@@ -92,5 +97,21 @@ export class Home implements OnInit {
         },
         error: (err: HttpErrorResponse) => console.log(err)
       });
+  }
+
+  ngOnDestroy(): void {
+    this.productSubs.unsubscribe();
+  }
+
+  addToCart(id: string): void {
+    this._cartService.addToCart(id).subscribe({
+      next: (res) => {
+        console.log(res);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+
   }
 }
