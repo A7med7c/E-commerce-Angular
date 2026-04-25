@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../Core/Services/auth-service';
@@ -20,14 +20,14 @@ export class ForgetPassword {
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _authService = inject(AuthService);
   private readonly _router = inject(Router);
-
+  private readonly _cdr = inject(ChangeDetectorRef);
 
   verifyEmail: FormGroup = this._formBuilder.group({
     email: [null, [Validators.required, Validators.email]]
   })
 
   verifyCode: FormGroup = this._formBuilder.group({
-    code: [null, [Validators.required, Validators.pattern(/^[0-9]{6}$/)]]
+    resetCode: [null, [Validators.required, Validators.pattern(/^[0-9]{6}$/)]]
   })
 
   resetPassword: FormGroup = this._formBuilder.group({
@@ -42,22 +42,22 @@ export class ForgetPassword {
   emailVerification(): void {
     if (this.verifyEmail.valid) {
       this.isLoading = true;
-      let email = this.verifyEmail.get('email')?.value;
+      const email = this.verifyEmail.get('email')?.value;
       this.resetPassword.get('email')?.patchValue(email);
 
       this._authService.sendCode(this.verifyEmail.value).subscribe({
         next: (res) => {
-          if (res.statusMsg === 'success')
-            this.step = 2;
-          console.log(res)
+          this.isLoading = false;
+          this.step = 2;
+          this._cdr.detectChanges();
         },
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
-          console.log(err.message)
+          console.log(err.message);
+          this._cdr.detectChanges();
         }
-      })
-    }
-    else {
+      });
+    } else {
       this.verifyEmail.markAllAsTouched();
     }
   }
@@ -65,20 +65,20 @@ export class ForgetPassword {
   codeVerification(): void {
     if (this.verifyCode.valid) {
       this.isLoading = true;
-      this._authService.sendCode(this.verifyCode.value).subscribe({
+
+      this._authService.codeVerification(this.verifyCode.value).subscribe({
         next: (res) => {
-          if (res.status === 'Success') {
-            this.step = 3;
-            console.log(res);
-          }
+          this.isLoading = false;
+          this.step = 3;
+          this._cdr.detectChanges();
         },
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
-          console.log(err.message)
+          console.log(err.message);
+          this._cdr.detectChanges();
         }
-      })
-    }
-    else {
+      });
+    } else {
       this.verifyCode.markAllAsTouched();
     }
   }
@@ -86,23 +86,23 @@ export class ForgetPassword {
   resetPasswordVerification(): void {
     if (this.resetPassword.valid) {
       this.isLoading = true;
-      this._authService.sendCode(this.resetPassword.value).subscribe({
+
+      this._authService.setNewPassword(this.resetPassword.value).subscribe({
         next: (res) => {
-          console.log(res);
+          this.isLoading = false;
           localStorage.setItem('token', res.token);
           this._authService.saveUserDate();
+          this._cdr.detectChanges();
           this._router.navigate(['/home']);
         },
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
-          console.log(err.message)
+          console.log(err.message);
+          this._cdr.detectChanges();
         }
-      })
-    }
-    else {
+      });
+    } else {
       this.resetPassword.markAllAsTouched();
     }
   }
-
-
 }
