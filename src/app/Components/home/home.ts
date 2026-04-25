@@ -12,6 +12,7 @@ import { SearchPipe } from '../../Core/Pipes/search-pipe';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CartService } from '../../Core/Services/cart-service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +28,7 @@ export class Home implements OnInit, OnDestroy {
   private readonly _categoryService = inject(CategoryService)
   private readonly _cartService = inject(CartService)
   private readonly _destroyRef = inject(DestroyRef)
+  private readonly _toastrService = inject(ToastrService)
 
   productList: IProducts[] = []
   categoryList: ICategory[] = []
@@ -107,9 +109,15 @@ export class Home implements OnInit, OnDestroy {
     this._cartService.addToCart(id).subscribe({
       next: (res) => {
         console.log(res);
+        this._toastrService.success(
+          res.message || 'Product added successfully'
+        );
       },
       error: (err) => {
         console.log(err);
+        this._toastrService.error(
+          err?.error?.message || 'Something went wrong'
+        );
       }
     })
 
