@@ -3,6 +3,7 @@ import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ProductService } from '../../Core/Services/product-service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IProducts } from '../../Core/Interfaces/iproducts';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-details',
@@ -14,6 +15,7 @@ export class Details implements OnInit {
   private readonly _activatedRoute = inject(ActivatedRoute);
   private readonly _productService = inject(ProductService);
   private readonly _cdr = inject(ChangeDetectorRef);
+  private readonly _toastrService = inject(ToastrService);
 
   productDetails: IProducts | null = null;
 
@@ -27,7 +29,10 @@ export class Details implements OnInit {
         this.productDetails = res.data;
         this._cdr.detectChanges();
       },
-      error: (err: HttpErrorResponse) => console.log(err.message)
+      error: (err: HttpErrorResponse) => {
+        this._toastrService.error(err.error?.message || 'Something went wrong');
+        console.log(err.message)
+      }
     });
   }
 }

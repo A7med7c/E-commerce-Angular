@@ -87,7 +87,10 @@ export class Home implements OnInit, OnDestroy {
           console.log(this.productList)
           this.productLoaded = true;
         },
-        error: (err: HttpErrorResponse) => console.log(err)
+        error: (err: HttpErrorResponse) => {
+          this._toastrService.error(err.error?.message || 'Something went wrong');
+          console.log(err)
+        }
       });
 
     this._categoryService.getAllCategories()
@@ -97,7 +100,10 @@ export class Home implements OnInit, OnDestroy {
           this.categoryList = res.data;
           this.categoryLoaded = true;
         },
-        error: (err: HttpErrorResponse) => console.log(err)
+        error: (err: HttpErrorResponse) => {
+          this._toastrService.error(err.error?.message || 'Something went wrong');
+          console.log(err)
+        }
       });
   }
 

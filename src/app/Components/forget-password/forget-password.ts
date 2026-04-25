@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../Core/Services/auth-service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-forget-password',
@@ -21,6 +22,7 @@ export class ForgetPassword {
   private readonly _authService = inject(AuthService);
   private readonly _router = inject(Router);
   private readonly _cdr = inject(ChangeDetectorRef);
+  private readonly _toast = inject(ToastrService);
 
   verifyEmail: FormGroup = this._formBuilder.group({
     email: [null, [Validators.required, Validators.email]]
@@ -49,16 +51,19 @@ export class ForgetPassword {
         next: (res) => {
           this.isLoading = false;
           this.step = 2;
+          this._toast.success(res.message || 'Code has sent  successfully');
           this._cdr.detectChanges();
         },
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
+          this._toast.error(err.error?.message || 'Something went wrong');
           console.log(err.message);
           this._cdr.detectChanges();
         }
       });
     } else {
       this.verifyEmail.markAllAsTouched();
+      this._toast.warning('Please complete the required fields');
     }
   }
 
@@ -70,16 +75,19 @@ export class ForgetPassword {
         next: (res) => {
           this.isLoading = false;
           this.step = 3;
+          this._toast.success(res.message || 'Successfull code');
           this._cdr.detectChanges();
         },
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
+          this._toast.error(err.error?.message || 'Something went wrong');
           console.log(err.message);
           this._cdr.detectChanges();
         }
       });
     } else {
       this.verifyCode.markAllAsTouched();
+      this._toast.warning('Please complete the required fields');
     }
   }
 
@@ -90,6 +98,7 @@ export class ForgetPassword {
       this._authService.setNewPassword(this.resetPassword.value).subscribe({
         next: (res) => {
           this.isLoading = false;
+          this._toast.success(res.message || 'Password reste complete successfully');
           localStorage.setItem('token', res.token);
           this._authService.saveUserDate();
           this._cdr.detectChanges();
@@ -97,12 +106,14 @@ export class ForgetPassword {
         },
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
+          this._toast.error(err.error?.message || 'Something went wrong');
           console.log(err.message);
           this._cdr.detectChanges();
         }
       });
     } else {
       this.resetPassword.markAllAsTouched();
+      this._toast.warning('Please complete the required fields');
     }
   }
 }

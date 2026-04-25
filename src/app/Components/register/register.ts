@@ -64,6 +64,7 @@ export class Register implements OnDestroy {
   submit(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
+      this._toast.warning('Please complete the required fields');
       return;
     }
 

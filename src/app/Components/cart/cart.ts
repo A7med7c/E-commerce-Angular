@@ -31,6 +31,7 @@ export class Cart implements OnInit, OnDestroy {
 
       },
       error: (err) => {
+        this._toastrService.error(err?.error?.message || 'Something went wrong');
         console.log(err);
       }
     })
@@ -46,14 +47,14 @@ export class Cart implements OnInit, OnDestroy {
         this.cartDetails = res.data;
         this._cdr.detectChanges();
 
-        this._toastrService.warning(
-          res.message || 'Item removed from cart',
+        this._toastrService.warning( 
+          res.message || 'Item removed from cart successfully',
           'Removed'
         );
       },
       error: (err) => {
         this._toastrService.error(
-          err?.error?.message || 'Failed to remove item',
+          err?.error?.message || 'Something went wrong',
           'Error'
         );
 
@@ -73,12 +74,11 @@ export class Cart implements OnInit, OnDestroy {
 
         this._toastrService.info(
           'Cart updated successfully',
-          'Updated'
         );
       },
       error: (err) => {
         this._toastrService.error(
-          err?.error?.message || 'Failed to update cart',
+          err?.error?.message || 'Something went wrong',
           'Error'
         );
 
@@ -94,13 +94,13 @@ export class Cart implements OnInit, OnDestroy {
         this._cdr.detectChanges();
 
         this._toastrService.warning(
-          'All items removed from cart',
+          res.message || 'Operation completed successfully',
           'Cart Cleared'
         );
       },
       error: (err) => {
         this._toastrService.error(
-          err?.error?.message || 'Failed to clear cart',
+          err?.error?.message || 'Something went wrong',
           'Error'
         );
 
