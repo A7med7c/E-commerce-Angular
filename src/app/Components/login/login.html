@@ -1,11 +1,5 @@
 <section class="p-2 my-2 rounded-4">
     <form [formGroup]="loginForm" (ngSubmit)="submit()">
-        @if (errorMessage) {
-        <div class="alert alert-danger">{{ errorMessage }}</div>
-        }
-        @if(success){
-        <div class="alert alert-success">Welcome !</div>
-        }
         <div class="mb-3">
             <label for="Email" class="form-label">Email</label>
             <input

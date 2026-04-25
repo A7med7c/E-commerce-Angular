@@ -1,12 +1,6 @@
 <section class="p-2 my-2 rounded-4">
     <h1 class="h2 text-main">Register Now:</h1>
     <form [formGroup]="registerForm" (ngSubmit)="submit()">
-        @if (errorMessage) {
-        <div class="alert alert-danger">{{ errorMessage }}</div>
-        }
-        @if(success){
-        <div class="alert alert-success">Account created successfully</div>
-        }
         <div class="mb-3">
             <label for="Name" class="form-label">Name</label>
             <input
@@ -33,7 +27,6 @@
                 [ngClass]="{
                 'is-valid': !registerForm.get('email')?.errors && (registerForm.get('email')?.touched||registerForm.get('email')?.dirty),
                 'is-invalid': registerForm.get('email')?.errors && (registerForm.get('email')?.touched||registerForm.get('email')?.dirty)}"
-                
                 formControlName="email" type="email" class="form-control" id="Email">
             @if (registerForm.get('email')?.errors && (registerForm.get('email')?.touched) ||
             registerForm.get('email')?.dirty) {
