@@ -1,20 +1,22 @@
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProductService } from './../../Core/Services/product-service';
-import { Component, inject, OnInit, DestroyRef, ChangeDetectionStrategy } from '@angular/core';  // ✅
+import { Component, inject, OnInit, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { IProducts } from '../../Core/Interfaces/iproducts';
 import { CategoryService } from '../../Core/Services/category-service';
 import { ICategory } from '../../Core/Interfaces/icategory';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { RouterLink } from "@angular/router";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SearchPipe } from '../../Core/Pipes/search-pipe';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
-  imports: [CarouselModule, RouterLink],
+  imports: [CarouselModule, RouterLink, SearchPipe, FormsModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush   // ✅ add this
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Home implements OnInit {
 
@@ -26,6 +28,7 @@ export class Home implements OnInit {
   categoryList: ICategory[] = []
   categoryLoaded = false;
   productLoaded = false;
+  searchText: string = ''
 
   customOptionsCategory: OwlOptions = {
     loop: true,
@@ -74,6 +77,7 @@ export class Home implements OnInit {
       .subscribe({
         next: (res) => {
           this.productList = res.data;
+          console.log(this.productList)
           this.productLoaded = true;
         },
         error: (err: HttpErrorResponse) => console.log(err)
