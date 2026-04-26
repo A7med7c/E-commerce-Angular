@@ -37,5 +37,7 @@
         </div>
     </div>
     }
+    <button [routerLink]="['/orders',cartDetails._id]" [disabled]="isCartEmpty" class="btn  btn-main mt-2">Place
+        Order</button>
 </section>
 }

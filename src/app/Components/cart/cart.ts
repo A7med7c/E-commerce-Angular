@@ -4,10 +4,11 @@ import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angula
 import { ICart } from '../../Core/Interfaces/icart';
 import { CurrencyPipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-cart',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './cart.html',
   styleUrl: './cart.scss',
 })
@@ -47,7 +48,7 @@ export class Cart implements OnInit, OnDestroy {
         this.cartDetails = res.data;
         this._cdr.detectChanges();
 
-        this._toastrService.warning( 
+        this._toastrService.warning(
           res.message || 'Item removed from cart successfully',
           'Removed'
         );
