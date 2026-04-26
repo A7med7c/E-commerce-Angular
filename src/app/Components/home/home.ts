@@ -1,5 +1,4 @@
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ProductService } from './../../Core/Services/product-service';
 import { Component, inject, OnInit, DestroyRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { IProducts } from '../../Core/Interfaces/iproducts';
@@ -86,10 +85,6 @@ export class Home implements OnInit, OnDestroy {
           this.productList = res.data;
           console.log(this.productList)
           this.productLoaded = true;
-        },
-        error: (err: HttpErrorResponse) => {
-          this._toastrService.error(err.error?.message || 'Something went wrong');
-          console.log(err)
         }
       });
 
@@ -99,10 +94,6 @@ export class Home implements OnInit, OnDestroy {
         next: (res) => {
           this.categoryList = res.data;
           this.categoryLoaded = true;
-        },
-        error: (err: HttpErrorResponse) => {
-          this._toastrService.error(err.error?.message || 'Something went wrong');
-          console.log(err)
         }
       });
   }
@@ -117,12 +108,6 @@ export class Home implements OnInit, OnDestroy {
         console.log(res);
         this._toastrService.success(
           res.message || 'Product added successfully'
-        );
-      },
-      error: (err) => {
-        console.log(err);
-        this._toastrService.error(
-          err?.error?.message || 'Something went wrong'
         );
       }
     })

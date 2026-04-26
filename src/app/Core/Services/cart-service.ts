@@ -12,49 +12,30 @@ export class CartService {
   private readonly _httpClient = inject(HttpClient);
   private readonly _storageService = inject(StorageService);
 
-  private readonly Headers: any = {
-    token: this._storageService.getToken() ?? ''
-  }
+
 
   addToCart(id: string): Observable<any> {
     return this._httpClient.post(
       `${environment.baseUrl}/cart`,
-      { productId: id },
-      {
-        headers: this.Headers
-      }
-    );
+      { productId: id });
   }
 
   getitems(): Observable<any> {
-    return this._httpClient.get(`${environment.baseUrl}/cart`, {
-      headers: this.Headers
-    })
+    return this._httpClient.get(`${environment.baseUrl}/cart`)
   }
 
   deleteItem(id: string): Observable<any> {
-    return this._httpClient.delete(`${environment.baseUrl}/cart/${id}`,
-      {
-        headers: this.Headers
-      }
-    )
+    return this._httpClient.delete(`${environment.baseUrl}/cart/${id}`)
   }
 
   changeCount(id: string, itemCount: number): Observable<any> {
     return this._httpClient.put(`${environment.baseUrl}/cart/${id}`,
       {
         "count": itemCount
-      },
-      {
-        headers: this.Headers
       })
   }
 
   clearCart(): Observable<any> {
-    return this._httpClient.delete(`${environment.baseUrl}/cart`,
-      {
-        headers: this.Headers
-      }
-    )
+    return this._httpClient.delete(`${environment.baseUrl}/cart`)
   }
 }

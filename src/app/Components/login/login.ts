@@ -52,7 +52,7 @@ export class Login implements OnDestroy {
               //save token in local storage 
               localStorage.setItem('token', res.token);
               //decode data form token 
-              this._authService.saveUserDate();
+              this._authService.saveUserData();
               this._router.navigate(['/home']);
             }, 200);
           }
@@ -61,7 +61,6 @@ export class Login implements OnDestroy {
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
           this.success = false;
-          this._toast.error(err.message)
           console.log(err)
           this._cdr.detectChanges();
         }

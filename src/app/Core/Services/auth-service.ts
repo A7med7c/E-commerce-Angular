@@ -24,7 +24,7 @@ export class AuthService {
     return this._httpClient.post(`${environment.baseUrl}/auth/signin`, data);
   }
 
-  saveUserDate(): void {
+  saveUserData(): void {
     if (localStorage.getItem('token') !== null) {
       this.userData = jwtDecode(localStorage.getItem('token')!)
     }

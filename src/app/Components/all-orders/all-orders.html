@@ -1,1 +1,81 @@
-<p>all-orders works!</p>
+@if (orders$ | async; as orders) {
+@if (orders.length === 0) {
+<!-- Empty -->
+<div class="alert alert-info text-center w-75 mx-auto mt-5">
+    No orders yet
+</div>
+} @else {
+<section class="container my-4">
+    <h1 class="h2 mb-4 text-main">My Orders</h1>
+
+    @for (order of orders; track order._id) {
+    <div class="card shadow-sm mb-4 p-3 rounded-4">
+
+        <!-- Order Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h5 class="mb-1 text-main">Order #{{ order.id }}</h5>
+                <small class="text-muted">
+                    {{ order.createdAt | date:'medium' }}
+                </small>
+            </div>
+
+            <div class="text-end">
+                @if (order.isPaid) {
+                <span class="badge bg-success me-2">Paid</span>
+                } @else {
+                <span class="badge bg-warning text-dark">Unpaid</span>
+                }
+
+                @if (order.isDelivered) {
+                <span class="badge bg-info">Delivered</span>
+                } @else {
+                <span class="badge bg-secondary">Pending</span>
+                }
+            </div>
+        </div>
+
+        <!-- Items -->
+        @for (item of order.cartItems; track item._id) {
+        <div class="row align-items-center border-bottom py-2">
+            <div class="col-md-1">
+                <img [src]="item.product.imageCover" class="w-100 rounded" [alt]="item.product.title">
+            </div>
+            <div class="col-md-8">
+                <h6 class="mb-1">{{ item.product.title }}</h6>
+                <small class="text-muted">
+                    Quantity: {{ item.count }}
+                </small>
+            </div>
+            <div class="col-md-3 text-end">
+                <span class="text-main fw-bold">
+                    {{ item.price | currency:'EGP' }}
+                </span>
+            </div>
+        </div>
+        }
+
+        <!-- Footer -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+                <small class="text-muted">
+                    Payment: {{ order.paymentMethodType | titlecase }}
+                </small>
+            </div>
+            <div>
+                <h5 class="text-main mb-0">
+                    Total: {{ order.totalOrderPrice | currency:'EGP' }}
+                </h5>
+            </div>
+        </div>
+
+    </div>
+    }
+</section>
+}
+} @else {
+<!-- Loading -->
+<div class="text-center mt-5">
+    <span class="spinner-border text-main"></span>
+</div>
+}

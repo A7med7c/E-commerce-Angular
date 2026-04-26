@@ -9,7 +9,7 @@ import { RouterLink } from "@angular/router";
 @Component({
   selector: 'app-cart',
   imports: [CurrencyPipe, RouterLink],
-  templateUrl: './cart.html',
+templateUrl: './cart.html',
   styleUrl: './cart.scss',
 })
 export class Cart implements OnInit, OnDestroy {

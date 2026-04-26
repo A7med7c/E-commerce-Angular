@@ -100,7 +100,7 @@ export class ForgetPassword {
           this.isLoading = false;
           this._toast.success(res.message || 'Password reste complete successfully');
           localStorage.setItem('token', res.token);
-          this._authService.saveUserDate();
+          this._authService.saveUserData();
           this._cdr.detectChanges();
           this._router.navigate(['/home']);
         },
