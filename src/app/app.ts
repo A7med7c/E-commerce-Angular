@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NgxSpinnerComponent } from 'ngx-spinner';
+import { TranslationService } from './Core/Services/translation-service';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,8 @@ import { NgxSpinnerComponent } from 'ngx-spinner';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App { }
+export class App {
+  constructor(private readonly translationService: TranslationService) { 
+    
+  }
+}

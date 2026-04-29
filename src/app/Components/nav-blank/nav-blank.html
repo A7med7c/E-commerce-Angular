@@ -9,16 +9,20 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="home" routerLinkActive="active-link">Home</a>
+                    <a class="nav-link" routerLink="home" routerLinkActive="active-link">{{ "navbar.Home" |
+                        translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="products" routerLinkActive="active-link">Products</a>
+                    <a class="nav-link" routerLink="products" routerLinkActive="active-link">{{ "navbar.Products" |
+                        translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="categories" routerLinkActive="active-link">Categories</a>
+                    <a class="nav-link" routerLink="categories" routerLinkActive="active-link">{{ "navbar.Categories" |
+                        translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="brands" routerLinkActive="active-link">Brands</a>
+                    <a class="nav-link" routerLink="brands" routerLinkActive="active-link">{{ "navbar.Brands" |
+                        translate}}</a>
                 </li>
 
             </ul>
@@ -58,7 +62,7 @@
                         <i class="fa-solid fa-cart-shopping"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link cr" (click)="_authService.logOut()">SignOut</a>
+                    <a class="nav-link cr" (click)="_authService.logOut()">{{ "navbar.Signout" | translate}}</a>
                 </li>
             </ul>
         </div>
