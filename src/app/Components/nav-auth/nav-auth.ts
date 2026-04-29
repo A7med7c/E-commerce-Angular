@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslationService } from '../../Core/Services/translation-service';
+import { TranslatePipe } from '@ngx-translate/core';
 type Lang = 'en' | 'ar';
 
 
 @Component({
   selector: 'app-nav-auth',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, TranslatePipe],
   templateUrl: './nav-auth.html',
   styleUrl: './nav-auth.scss',
 })

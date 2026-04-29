@@ -69,7 +69,7 @@
             @if(registerForm.getError('mismatch') && registerForm.get('rePassword')?.value &&
             (registerForm.get('rePassword')?.touched||registerForm.get('rePassword')?.dirty)){
             <small class="text-danger">Passwords do not match</small>
-            }.<i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()"
+            }<i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()"
                 style="position:absolute; right:30px; top:42px; cursor:pointer;"></i>
         </div>
         <div class="mb-3">

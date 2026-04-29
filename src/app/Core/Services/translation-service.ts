@@ -42,7 +42,7 @@ export class TranslationService {
   getCurrentLang$(): Observable<LangChangeEvent> {
     return this._translateService.onLangChange;
   }
-  
+
   useLanguage(language: Lang): void {
     const normalized = this.normalizeLang(language);
 

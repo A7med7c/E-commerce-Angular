@@ -4,6 +4,12 @@
     "Products": "Products",
     "Categories": "Categories",
     "Brands": "Brands",
-    "Signout": "Sign Out"
+    "Signout": "Sign Out",
+     "language": "Language"
+  },
+"auth":{
+    "login": "Login",
+    "register": "Register",
+    "language": "Language"
   }
 }

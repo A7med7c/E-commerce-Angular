@@ -4,6 +4,12 @@
     "Products": "المنتجات",
     "Categories": "الأقسام",
     "Brands": "العلامات التجارية",
-    "Signout": "تسجيل الخروج"
+    "Signout": "تسجيل الخروج",
+    "language": "اللغة"
+  },
+  "auth":{
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "language": "اللغة"
   }
 }
