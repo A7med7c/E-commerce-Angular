@@ -11,5 +11,19 @@
     "login": "Login",
     "register": "Register",
     "language": "Language"
+  },
+  "login": {
+    "email": "Email",
+    "password": "Password",
+    "login": "Login",
+    "forgetPassword": "Forget Password",
+    "errors": {
+      "emailRequired": "*Email is required",
+      "invalidEmail": "*Invalid email format",
+      "passwordRequired": "*Password is required",
+      "passwordMin": "*Minimum 6 characters"
+    },
+     "loginSuccess": "Welcome to Fresh Cart",
+  "loginError": "Login failed, please try again"
   }
 }

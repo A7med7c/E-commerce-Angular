@@ -6,72 +6,84 @@ import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, NgClass, RouterLink],
+  standalone: true,
+  imports: [ReactiveFormsModule, NgClass, RouterLink, TranslatePipe],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
+  styleUrls: ['./login.scss'],
 })
 export class Login implements OnDestroy {
-  private readonly _FormBuilder = inject(FormBuilder)
-  private readonly _authService = inject(AuthService)
-  private readonly _router = inject(Router)
-  private readonly _cdr = inject(ChangeDetectorRef)
-  private readonly _toast = inject(ToastrService)
 
+  private readonly _fb = inject(FormBuilder);
+  private readonly _authService = inject(AuthService);
+  private readonly _router = inject(Router);
+  private readonly _cdr = inject(ChangeDetectorRef);
+  private readonly _toast = inject(ToastrService);
+  private readonly _translate = inject(TranslateService);
 
-  showPassword: boolean = false;
-  isLoading: boolean = false;
-  success: boolean = false;
-  productsSubscribtion!: Subscription
+  showPassword = false;
+  isLoading = false;
+  success = false;
 
+  private loginSub?: Subscription;
 
-  loginForm: FormGroup = this._FormBuilder.group({
+  loginForm: FormGroup = this._fb.group({
     email: [null, [Validators.required, Validators.email]],
     password: [null, [Validators.required, Validators.pattern(/^\w{6,}$/)]]
-  })
+  });
 
-  togglePassword() {
+  togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
 
   submit(): void {
-    if (this.loginForm.valid) {
-      this.isLoading = true;
-      this.success = false;
-
-      this.productsSubscribtion = this._authService.login(this.loginForm.value).subscribe({
-        next: (res: any) => {
-          this.isLoading = false;
-          if (res.message === 'success') {
-            this.success = true;
-            this.loginForm.reset();
-            this._toast.success("Welcome to Fresh Cart")
-            setTimeout(() => {
-              //save token in local storage 
-              localStorage.setItem('token', res.token);
-              //decode data form token 
-              this._authService.saveUserData();
-              this._router.navigate(['/home']);
-            }, 200);
-          }
-          // this.isLoading = false;
-        },
-        error: (err: HttpErrorResponse) => {
-          this.isLoading = false;
-          this.success = false;
-          console.log(err)
-          this._cdr.detectChanges();
-        }
-      });
-    }
-    else {
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      return;
     }
+
+    this.isLoading = true;
+    this.success = false;
+
+    this.loginSub = this._authService.login(this.loginForm.value).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+
+        if (res.message === 'success') {
+          this.success = true;
+          this.loginForm.reset();
+
+          // ✅ translation instead of hardcoded text
+          const message = this._translate.instant('auth.loginSuccess');
+          this._toast.success(message);
+
+          setTimeout(() => {
+            localStorage.setItem('token', res.token);
+            this._authService.saveUserData();
+            this._router.navigate(['/home']);
+          }, 200);
+        }
+      },
+
+      error: (err: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.success = false;
+
+        console.error(err);
+
+        // optional: translated error
+        const errorMsg = this._translate.instant('auth.loginError');
+        this._toast.error(errorMsg);
+
+        this._cdr.detectChanges();
+      }
+    });
   }
 
   ngOnDestroy(): void {
-    this.productsSubscribtion?.unsubscribe();
+    this.loginSub?.unsubscribe();
   }
 }
