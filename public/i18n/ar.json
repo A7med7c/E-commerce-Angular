@@ -23,7 +23,9 @@
       "passwordRequired": "*كلمة المرور مطلوبة",
       "passwordMin": "*الحد الأدنى 6 أحرف"
     },
+    "toast":{
   "loginSuccess": "مرحبًا بك في فريش كارت",
   "loginError": "فشل تسجيل الدخول، حاول مرة أخرى"
+    }
   }
 }

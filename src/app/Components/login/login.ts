@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../Core/Services/auth-service';
@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslationService } from '../../Core/Services/translation-service';
 
 @Component({
   selector: 'app-login',
@@ -23,10 +24,21 @@ export class Login implements OnDestroy {
   private readonly _cdr = inject(ChangeDetectorRef);
   private readonly _toast = inject(ToastrService);
   private readonly _translate = inject(TranslateService);
+  private readonly _translationService = inject(TranslationService);
 
   showPassword = false;
   isLoading = false;
   success = false;
+
+  currentLang: string = 'en';
+
+  ngOnInit(): void {
+    this.currentLang = this._translationService.getCurrentLang();
+
+    this._translationService.getCurrentLang$().subscribe(() => {
+      this.currentLang = this._translationService.getCurrentLang();
+    });
+  }
 
   private loginSub?: Subscription;
 
@@ -56,8 +68,8 @@ export class Login implements OnDestroy {
           this.success = true;
           this.loginForm.reset();
 
-          // ✅ translation instead of hardcoded text
-          const message = this._translate.instant('auth.loginSuccess');
+          //  translation instead of hardcoded text
+          const message = this._translate.instant('login.toast.loginSuccess');
           this._toast.success(message);
 
           setTimeout(() => {
@@ -75,7 +87,7 @@ export class Login implements OnDestroy {
         console.error(err);
 
         // optional: translated error
-        const errorMsg = this._translate.instant('auth.loginError');
+        const errorMsg = this._translate.instant('login.toast.loginError');
         this._toast.error(errorMsg);
 
         this._cdr.detectChanges();

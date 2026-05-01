@@ -23,7 +23,10 @@
       "passwordRequired": "*Password is required",
       "passwordMin": "*Minimum 6 characters"
     },
-     "loginSuccess": "Welcome to Fresh Cart",
-  "loginError": "Login failed, please try again"
+    "toast":{
+    "loginSuccess": "Welcome to Fresh Cart",
+    "loginError": "Login failed, please try again"
+    }
+     
   }
 }

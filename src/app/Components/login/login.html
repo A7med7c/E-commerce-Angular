@@ -41,9 +41,8 @@
             loginForm.get('password')?.dirty)
             }">
 
-            <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()"
-                style="position:absolute; right:30px; top:42px; cursor:pointer;"></i>
-
+            <i class="fa-solid password-toggle" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                (click)="togglePassword()"></i>
             @if (loginForm.get('password')?.errors && (loginForm.get('password')?.touched ||
             loginForm.get('password')?.dirty)) {
 
