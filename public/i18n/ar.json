@@ -17,6 +17,14 @@
     "register": "إنشاء حساب",
     "language": "اللغة"
   },
+  "footer": {
+    "title": "احصل على تطبيق FreshCart",
+    "description": "سنرسل لك رابطًا، افتحه على هاتفك لتحميل التطبيق",
+    "emailPlaceholder": "البريد الإلكتروني",
+    "shareBtn": "مشاركة رابط التطبيق",
+    "paymentPartners": "شركاء الدفع",
+    "getDeliveries": "احصل على التوصيل عبر FreshCart"
+  },
   "login": {
     "email": "البريد الإلكتروني",
     "password": "كلمة المرور",

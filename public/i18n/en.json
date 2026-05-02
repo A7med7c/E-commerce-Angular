@@ -17,6 +17,14 @@
     "register": "Register",
     "language": "Language"
   },
+  "footer": {
+    "title": "Get The FreshCart App",
+    "description": "We will send you a link, open it on your phone to download the app",
+    "emailPlaceholder": "Email",
+    "shareBtn": "Share App Link",
+    "paymentPartners": "Payment partners",
+    "getDeliveries": "Get Deliveries with FreshCart"
+  },
   "login": {
     "email": "Email",
     "password": "Password",
@@ -32,6 +40,5 @@
     "loginSuccess": "Welcome to Fresh Cart",
     "loginError": "Login failed, please try again"
     }
-     
   }
 }
