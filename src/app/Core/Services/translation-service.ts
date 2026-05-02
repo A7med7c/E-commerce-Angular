@@ -1,5 +1,5 @@
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID, RendererFactory2 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { LangChangeEvent } from '@ngx-translate/core';
@@ -12,7 +12,9 @@ export class TranslationService {
 
   private readonly _translateService = inject(TranslateService);
   private readonly _platformId = inject(PLATFORM_ID);
-  private readonly _document = inject(DOCUMENT);
+  // private readonly _document = inject(DOCUMENT);
+  private readonly _renderer2 = inject(RendererFactory2).createRenderer(null, null);
+
 
   private readonly _supportedLangs: Lang[] = ['en', 'ar'];
   private readonly _defaultLang: Lang = 'en';
@@ -73,8 +75,7 @@ export class TranslationService {
     if (!isPlatformBrowser(this._platformId)) return;
 
     const dir = language === 'ar' ? 'rtl' : 'ltr';
-
-    this._document.documentElement.dir = dir;
-    this._document.documentElement.lang = language;
+    this._renderer2.setAttribute(document.documentElement, 'dir', dir)
+    this._renderer2.setAttribute(document.documentElement, 'lang', language)
   }
 }

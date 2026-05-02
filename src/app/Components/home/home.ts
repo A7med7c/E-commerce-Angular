@@ -12,10 +12,12 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CartService } from '../../Core/Services/cart-service';
 import { ToastrService } from 'ngx-toastr';
+import { TranslationService } from '../../Core/Services/translation-service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
-  imports: [CarouselModule, RouterLink, SearchPipe, FormsModule],
+  imports: [CarouselModule, RouterLink, SearchPipe, FormsModule, TranslatePipe],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,6 +30,7 @@ export class Home implements OnInit, OnDestroy {
   private readonly _cartService = inject(CartService)
   private readonly _destroyRef = inject(DestroyRef)
   private readonly _toastrService = inject(ToastrService)
+  private readonly _translationService = inject(TranslationService);
 
   productList: IProducts[] = []
   categoryList: ICategory[] = []
@@ -35,6 +38,7 @@ export class Home implements OnInit, OnDestroy {
   productLoaded = false;
   searchText: string = ''
   productSubs!: Subscription
+  currentLang: string = 'en';
 
   customOptionsCategory: OwlOptions = {
     loop: true,
@@ -98,6 +102,12 @@ export class Home implements OnInit, OnDestroy {
           this.categoryLoaded = true;
         }
       });
+
+    this.currentLang = this._translationService.getCurrentLang();
+
+    this._translationService.getCurrentLang$().subscribe(() => {
+      this.currentLang = this._translationService.getCurrentLang();
+    });
   }
 
   ngOnDestroy(): void {

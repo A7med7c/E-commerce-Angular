@@ -7,6 +7,11 @@
     "Signout": "Sign Out",
      "language": "Language"
   },
+  "home":{
+  "popularcategories":"Popular Categories",
+  "popularproducts":"Popular Products",
+  "Searchbyname...":"Search by name..."
+  },
 "auth":{
     "login": "Login",
     "register": "Register",

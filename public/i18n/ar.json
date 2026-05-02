@@ -7,6 +7,11 @@
     "Signout": "تسجيل الخروج",
     "language": "اللغة"
   },
+  "home":{
+  "popularcategories":"أشهر الأقسام",
+  "popularproducts":"أشهر المنتجات",
+    "Searchbyname...":"ابحث باستخدام اسم المنتج.."
+  },
   "auth":{
     "login": "تسجيل الدخول",
     "register": "إنشاء حساب",
