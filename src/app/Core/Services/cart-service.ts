@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../Environments/environment';
 
@@ -10,8 +10,8 @@ export class CartService {
 
   private readonly _httpClient = inject(HttpClient);
 
-  itemsNumber: BehaviorSubject<number> = new BehaviorSubject(0);
-  readonly itemsNumber$ = this.itemsNumber.asObservable();
+  itemsNumber: WritableSignal<number> = signal(0);
+
 
   addToCart(id: string): Observable<any> {
     return this._httpClient.post(
@@ -25,8 +25,8 @@ export class CartService {
 
   refreshItemsCount(): void {
     this.getitems().subscribe({
-      next: (res) => this.itemsNumber.next(res.numOfCartItems ?? 0),
-      error: () => this.itemsNumber.next(0),
+      next: (res) => this.itemsNumber.set(res.numOfCartItems ?? 0),
+      error: () => this.itemsNumber.set(0),
     });
   }
 

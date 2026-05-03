@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../Core/Services/auth-service';
@@ -25,7 +25,7 @@ export class NavBlank implements OnInit {
   private readonly _destroyRef = inject(DestroyRef);
 
   currentLang: string = 'en';
-  cartItemsNumber$ = this._cartService.itemsNumber$;
+  cartItemsNumber: Signal<number> = computed(() => this._cartService.itemsNumber());
 
   ngOnInit(): void {
     this.currentLang = this._translationService.getCurrentLang();

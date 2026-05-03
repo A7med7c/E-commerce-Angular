@@ -83,13 +83,13 @@
                 </li>
 
                 <li class="nav-item position-relative">
-                    <a class="nav-link" routerLink="cart" routerLinkActive="active-link">
+                    <a class="nav-link" routerLink="cart">
 
                         <i class="fa-solid fa-cart-shopping"></i>
                         <span
                             class="position-absolute top-0 mt-1 start-100 translate-middle badge rounded-pill bg-danger">
 
-                            @if (cartItemsNumber$ | async; as cartItemsNumber) {
+                            @if (cartItemsNumber(); as cartItemsNumber) {
                             {{ cartItemsNumber > 99 ? '99+' : cartItemsNumber }}
                             }
 

@@ -34,7 +34,7 @@ export class Cart implements OnInit, OnDestroy {
         console.log(res.data);
         this.cartDetails = res.data;
         // Update the cart items number for the badge in navbar
-        this._cartService.itemsNumber.next(res.numOfCartItems);
+        this._cartService.itemsNumber.set(res.numOfCartItems);
         this._cdr.detectChanges();
       },
       error: (err) => {
@@ -54,7 +54,7 @@ export class Cart implements OnInit, OnDestroy {
     this._cartService.deleteItem(id).subscribe({
       next: (res) => {
         this.cartDetails = res.data;
-        this._cartService.itemsNumber.next(res.numOfCartItems)
+        this._cartService.itemsNumber.set(res.numOfCartItems)
         this._cdr.detectChanges();
 
         if (this.canToast) {
@@ -85,7 +85,7 @@ export class Cart implements OnInit, OnDestroy {
       next: (res) => {
         this.cartDetails = res.data;
         // Update the cart items number for the badge in navbar
-        this._cartService.itemsNumber.next(res.numOfCartItems);
+        this._cartService.itemsNumber.set(res.numOfCartItems);
         this._cdr.detectChanges();
 
         if (this.canToast) {
@@ -112,7 +112,7 @@ export class Cart implements OnInit, OnDestroy {
       next: (res) => {
         this.cartDetails = res.data;
         // Update the cart items number for the badge in navbar (should be 0)
-        this._cartService.itemsNumber.next(res.numOfCartItems || 0);
+        this._cartService.itemsNumber.set(res.numOfCartItems || 0);
         this._cdr.detectChanges();
 
         if (this.canToast) {

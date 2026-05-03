@@ -123,7 +123,7 @@ export class Home implements OnInit, OnDestroy {
         this._toastrService.success(
           res.message || 'Product added successfully'
         );
-        this._cartService.itemsNumber.next(res.numOfCartItems);
+        this._cartService.itemsNumber.set(res.numOfCartItems);
         console.log(this.cartItemsNumber)
       }
     })
