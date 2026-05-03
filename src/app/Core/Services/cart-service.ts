@@ -11,6 +11,7 @@ export class CartService {
   private readonly _httpClient = inject(HttpClient);
 
   itemsNumber: BehaviorSubject<number> = new BehaviorSubject(0);
+  readonly itemsNumber$ = this.itemsNumber.asObservable();
 
   addToCart(id: string): Observable<any> {
     return this._httpClient.post(
@@ -20,6 +21,13 @@ export class CartService {
 
   getitems(): Observable<any> {
     return this._httpClient.get(`${environment.baseUrl}/cart`)
+  }
+
+  refreshItemsCount(): void {
+    this.getitems().subscribe({
+      next: (res) => this.itemsNumber.next(res.numOfCartItems ?? 0),
+      error: () => this.itemsNumber.next(0),
+    });
   }
 
   deleteItem(id: string): Observable<any> {

@@ -89,7 +89,9 @@
                         <span
                             class="position-absolute top-0 mt-1 start-100 translate-middle badge rounded-pill bg-danger">
 
+                            @if (cartItemsNumber$ | async; as cartItemsNumber) {
                             {{ cartItemsNumber > 99 ? '99+' : cartItemsNumber }}
+                            }
 
                         </span>
 
