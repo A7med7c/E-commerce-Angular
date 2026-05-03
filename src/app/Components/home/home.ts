@@ -39,6 +39,8 @@ export class Home implements OnInit, OnDestroy {
   searchText: string = ''
   productSubs!: Subscription
   currentLang: string = 'en';
+  cartItemsNumber: number = 0;
+
 
   customOptionsCategory: OwlOptions = {
     loop: true,
@@ -121,6 +123,8 @@ export class Home implements OnInit, OnDestroy {
         this._toastrService.success(
           res.message || 'Product added successfully'
         );
+        this._cartService.itemsNumber.next(res.numOfCartItems);
+        console.log(this.cartItemsNumber)
       }
     })
 

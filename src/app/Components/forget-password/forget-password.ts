@@ -99,10 +99,16 @@ export class ForgetPassword {
         next: (res) => {
           this.isLoading = false;
           this._toast.success(res.message || 'Password reste complete successfully');
+
+          // Store token immediately
           localStorage.setItem('token', res.token);
           this._authService.saveUserData();
           this._cdr.detectChanges();
-          this._router.navigate(['/home']);
+
+          // Brief delay for UX (optional)
+          setTimeout(() => {
+            this._router.navigate(['/home']);
+          }, 100);
         },
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;

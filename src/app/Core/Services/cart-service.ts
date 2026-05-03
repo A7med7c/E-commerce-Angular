@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../Environments/environment';
-import { StorageService } from './storage-serive';
 
 @Injectable({
   providedIn: 'root',
@@ -10,9 +9,8 @@ import { StorageService } from './storage-serive';
 export class CartService {
 
   private readonly _httpClient = inject(HttpClient);
-  private readonly _storageService = inject(StorageService);
 
-
+  itemsNumber: BehaviorSubject<number> = new BehaviorSubject(0);
 
   addToCart(id: string): Observable<any> {
     return this._httpClient.post(

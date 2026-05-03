@@ -68,15 +68,18 @@ export class Login implements OnDestroy {
           this.success = true;
           this.loginForm.reset();
 
+          // Store token immediately (don't wait)
+          localStorage.setItem('token', res.token);
+          this._authService.saveUserData();
+
           //  translation instead of hardcoded text
           const message = this._translate.instant('login.toast.loginSuccess');
           this._toast.success(message);
 
+          // Brief delay for UX (optional, can be removed)
           setTimeout(() => {
-            localStorage.setItem('token', res.token);
-            this._authService.saveUserData();
             this._router.navigate(['/home']);
-          }, 200);
+          }, 100);
         }
       },
 
