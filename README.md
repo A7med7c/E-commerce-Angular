@@ -1,6 +1,6 @@
 # Talabak
 
-Talabak is an Angular 21 e-commerce storefront built with standalone components, SSR, and a modern UI stack. It integrates with the RouteMisr e-commerce API to deliver a complete shopping experience, from browsing to checkout and order history.
+Talabak is an Angular 21 e-commerce storefront built with standalone components, SSR, and a modern UI stack. It integrates with e-commerce API to deliver a complete shopping experience, from browsing to checkout and order history.
 
 ## Features
 
