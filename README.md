@@ -1,59 +1,84 @@
-# ECommerceAngular
+# Talabak
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.1.
+Talabak is an Angular 21 e-commerce storefront built with standalone components, SSR, and a modern UI stack. It integrates with the RouteMisr e-commerce API to deliver a complete shopping experience, from browsing to checkout and order history.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- Authentication flow with register, login, and password reset
+- JWT-based session handling with route guards
+- Product browsing with category carousel and search by name
+- Product details view with ratings and pricing
+- Cart management (add, update quantity, remove, clear)
+- Checkout flow that redirects to a hosted payment session
+- Order history with payment and delivery status badges
+- English/Arabic localization with RTL/LTR switching
+- Global loading spinner and toast notifications
+- Server-side rendering with hydration and view transitions
 
-```bash
-ng serve
-```
+## Tech Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Angular 21 (standalone components + SSR)
+- TypeScript, RxJS
+- Bootstrap 5 + FontAwesome
+- ngx-translate, ngx-toastr, ngx-spinner
+- ngx-owl-carousel-o
 
-## Code scaffolding
+## Getting Started
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Prerequisites
 
-```bash
-ng generate component component-name
-```
+- Node.js + npm
+- Angular CLI (optional, for local commands)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Install
 
 ```bash
-ng test
+npm install
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### Run the app
 
 ```bash
-ng e2e
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Then open `http://localhost:4200/`.
 
-## Additional Resources
+### Build
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+npm run build
+```
+
+### Test
+
+```bash
+npm test
+```
+
+## Configuration
+
+- API base URL and frontend URL:
+  - `src/app/Core/Environments/environment.ts`
+- Translation files:
+  - `public/i18n/en.json`
+  - `public/i18n/ar.json`
+
+## Project Structure
+
+```
+src/
+  app/
+    Components/   # UI pages (home, cart, orders, auth)
+    Core/         # services, guards, interceptors, pipes
+    Layouts/      # auth + main layouts
+  public/
+    i18n/         # translation files
+```
+
+## Scripts
+
+- `npm start` — run the development server
+- `npm run build` — production build with SSR output
+- `npm run watch` — development build with watch mode
+- `npm test` — run unit tests
