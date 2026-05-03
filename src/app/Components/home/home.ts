@@ -1,6 +1,6 @@
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { ProductService } from './../../Core/Services/product-service';
-import { Component, inject, OnInit, DestroyRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, DestroyRef, ChangeDetectionStrategy, OnDestroy, signal } from '@angular/core';
 import { IProducts } from '../../Core/Interfaces/iproducts';
 import { CategoryService } from '../../Core/Services/category-service';
 import { ICategory } from '../../Core/Interfaces/icategory';
@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CartService } from '../../Core/Services/cart-service';
 import { ToastrService } from 'ngx-toastr';
-import { TranslationService } from '../../Core/Services/translation-service';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -30,15 +29,13 @@ export class Home implements OnInit, OnDestroy {
   private readonly _cartService = inject(CartService)
   private readonly _destroyRef = inject(DestroyRef)
   private readonly _toastrService = inject(ToastrService)
-  private readonly _translationService = inject(TranslationService);
 
-  productList: IProducts[] = []
-  categoryList: ICategory[] = []
-  categoryLoaded = false;
-  productLoaded = false;
+  readonly productList = signal<IProducts[]>([])
+  readonly categoryList = signal<ICategory[]>([])
+  readonly categoryLoaded = signal(false);
+  readonly productLoaded = signal(false);
   searchText: string = ''
   productSubs!: Subscription
-  currentLang: string = 'en';
   cartItemsNumber: number = 0;
 
 
@@ -90,9 +87,9 @@ export class Home implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (res) => {
-          this.productList = res.data;
-          console.log(this.productList)
-          this.productLoaded = true;
+          this.productList.set(res.data);
+          console.log(this.productList())
+          this.productLoaded.set(true);
         }
       });
 
@@ -100,16 +97,10 @@ export class Home implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (res) => {
-          this.categoryList = res.data;
-          this.categoryLoaded = true;
+          this.categoryList.set(res.data);
+          this.categoryLoaded.set(true);
         }
       });
-
-    this.currentLang = this._translationService.getCurrentLang();
-
-    this._translationService.getCurrentLang$().subscribe(() => {
-      this.currentLang = this._translationService.getCurrentLang();
-    });
   }
 
   ngOnDestroy(): void {

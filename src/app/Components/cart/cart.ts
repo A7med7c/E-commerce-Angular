@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 import { CartService } from './../../Core/Services/cart-service';
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { ICart } from '../../Core/Interfaces/icart';
 import { CurrencyPipe, isPlatformBrowser } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +16,6 @@ export class Cart implements OnInit, OnDestroy {
 
 
   private readonly _cartService = inject(CartService);
-  private readonly _cdr = inject(ChangeDetectorRef);
   private readonly _toastrService = inject(ToastrService)
   private readonly _platformId = inject(PLATFORM_ID);
 
@@ -25,17 +24,17 @@ export class Cart implements OnInit, OnDestroy {
   }
 
 
-  itemsSubs!: Subscription;
-  cartDetails: ICart | null = null;
+  itemsSubs?: Subscription;
+  readonly cartDetails = signal<ICart | null>(null);
+  readonly isCartEmpty = computed(() => !this.cartDetails()?.products?.length);
 
   ngOnInit(): void {
     this.itemsSubs = this._cartService.getitems().subscribe({
       next: (res) => {
         console.log(res.data);
-        this.cartDetails = res.data;
+        this.cartDetails.set(res.data);
         // Update the cart items number for the badge in navbar
         this._cartService.itemsNumber.set(res.numOfCartItems);
-        this._cdr.detectChanges();
       },
       error: (err) => {
         if (this.canToast) {
@@ -47,15 +46,14 @@ export class Cart implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.itemsSubs.unsubscribe();
+    this.itemsSubs?.unsubscribe();
   }
 
   removeItem(id: string): void {
     this._cartService.deleteItem(id).subscribe({
       next: (res) => {
-        this.cartDetails = res.data;
+        this.cartDetails.set(res.data);
         this._cartService.itemsNumber.set(res.numOfCartItems)
-        this._cdr.detectChanges();
 
         if (this.canToast) {
           this._toastrService.warning(
@@ -83,10 +81,9 @@ export class Cart implements OnInit, OnDestroy {
 
     this._cartService.changeCount(id, count).subscribe({
       next: (res) => {
-        this.cartDetails = res.data;
+        this.cartDetails.set(res.data);
         // Update the cart items number for the badge in navbar
         this._cartService.itemsNumber.set(res.numOfCartItems);
-        this._cdr.detectChanges();
 
         if (this.canToast) {
           this._toastrService.info(
@@ -110,10 +107,9 @@ export class Cart implements OnInit, OnDestroy {
   removeAllItems(): void {
     this._cartService.clearCart().subscribe({
       next: (res) => {
-        this.cartDetails = res.data;
+        this.cartDetails.set(res.data);
         // Update the cart items number for the badge in navbar (should be 0)
         this._cartService.itemsNumber.set(res.numOfCartItems || 0);
-        this._cdr.detectChanges();
 
         if (this.canToast) {
           this._toastrService.warning(
@@ -135,7 +131,4 @@ export class Cart implements OnInit, OnDestroy {
     });
   }
 
-  get isCartEmpty(): boolean {
-    return !this.cartDetails?.products?.length;
-  }
 }

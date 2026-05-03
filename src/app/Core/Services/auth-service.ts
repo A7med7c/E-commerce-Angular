@@ -1,6 +1,6 @@
 import { environment } from './../Environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
@@ -10,11 +10,14 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-
   private readonly _httpClient = inject(HttpClient)
   private readonly _router = inject(Router)
 
-  userData: any = null;
+  private readonly _userData = signal<any | null>(null);
+  readonly userData = this._userData.asReadonly();
+
+  private readonly _isLoggedIn = signal(false);
+  readonly isLoggedIn = this._isLoggedIn.asReadonly();
 
   register(data: object): Observable<any> {
     return this._httpClient.post(`${environment.baseUrl}/auth/signup`, data);
@@ -26,13 +29,18 @@ export class AuthService {
 
   saveUserData(): void {
     if (localStorage.getItem('token') !== null) {
-      this.userData = jwtDecode(localStorage.getItem('token')!)
+      this._userData.set(jwtDecode(localStorage.getItem('token')!));
+      this._isLoggedIn.set(true);
+    } else {
+      this._userData.set(null);
+      this._isLoggedIn.set(false);
     }
   }
 
   logOut(): void {
     localStorage.removeItem('token');
-    this.userData = null;
+    this._userData.set(null);
+    this._isLoggedIn.set(false);
     // if there is endpoint in backend that remove token call it 
     this._router.navigate(['/login']);
   }

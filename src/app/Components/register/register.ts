@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../Core/Services/auth-service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -18,13 +18,12 @@ export class Register implements OnDestroy {
   private readonly _authService = inject(AuthService)
   private readonly _formBuilder = inject(FormBuilder)
   private readonly _router = inject(Router)
-  private readonly _cdr = inject(ChangeDetectorRef)
   private readonly _toast = inject(ToastrService)
 
 
-  isLoading: boolean = false;
-  success: boolean = false;
-  showPassword: boolean = false;
+  readonly isLoading = signal(false);
+  readonly success = signal(false);
+  readonly showPassword = signal(false);
   productsSubscribtion!: Subscription
 
 
@@ -59,7 +58,7 @@ export class Register implements OnDestroy {
   }
 
   togglePassword() {
-    this.showPassword = !this.showPassword;
+    this.showPassword.update((value) => !value);
   }
   submit(): void {
     if (this.registerForm.invalid) {
@@ -68,34 +67,30 @@ export class Register implements OnDestroy {
       return;
     }
 
-    this.isLoading = true;
-    this.success = false;
+    this.isLoading.set(true);
+    this.success.set(false);
 
     this.productsSubscribtion = this._authService.register(this.registerForm.value).subscribe({
       next: (res: any) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         this._toast.success('Account Created Successfully');
 
         if (res.message === 'success') {
-          this.success = true;
+          this.success.set(true);
           this.registerForm.reset();
 
           setTimeout(() => {
             this._router.navigate(['/login']);
           }, 300);
         }
-
-        this._cdr.detectChanges();
       },
 
       error: (err: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.success = false;
+        this.isLoading.set(false);
+        this.success.set(false);
 
         this._toast.error(err.error?.message || 'Something went wrong');
-
-        this._cdr.detectChanges();
       }
     });
   }

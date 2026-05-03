@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../Core/Services/auth-service';
 import { Router, RouterLink } from '@angular/router';
@@ -21,24 +21,13 @@ export class Login implements OnDestroy {
   private readonly _fb = inject(FormBuilder);
   private readonly _authService = inject(AuthService);
   private readonly _router = inject(Router);
-  private readonly _cdr = inject(ChangeDetectorRef);
   private readonly _toast = inject(ToastrService);
   private readonly _translate = inject(TranslateService);
   private readonly _translationService = inject(TranslationService);
 
-  showPassword = false;
-  isLoading = false;
-  success = false;
-
-  currentLang: string = 'en';
-
-  ngOnInit(): void {
-    this.currentLang = this._translationService.getCurrentLang();
-
-    this._translationService.getCurrentLang$().subscribe(() => {
-      this.currentLang = this._translationService.getCurrentLang();
-    });
-  }
+  readonly showPassword = signal(false);
+  readonly isLoading = signal(false);
+  readonly success = signal(false);
 
   private loginSub?: Subscription;
 
@@ -48,7 +37,7 @@ export class Login implements OnDestroy {
   });
 
   togglePassword(): void {
-    this.showPassword = !this.showPassword;
+    this.showPassword.update((value) => !value);
   }
 
   submit(): void {
@@ -57,15 +46,15 @@ export class Login implements OnDestroy {
       return;
     }
 
-    this.isLoading = true;
-    this.success = false;
+    this.isLoading.set(true);
+    this.success.set(false);
 
     this.loginSub = this._authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         if (res.message === 'success') {
-          this.success = true;
+          this.success.set(true);
           this.loginForm.reset();
 
           // Store token immediately (don't wait)
@@ -84,16 +73,14 @@ export class Login implements OnDestroy {
       },
 
       error: (err: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.success = false;
+        this.isLoading.set(false);
+        this.success.set(false);
 
         console.error(err);
 
         // optional: translated error
         const errorMsg = this._translate.instant('login.toast.loginError');
         this._toast.error(errorMsg);
-
-        this._cdr.detectChanges();
       }
     });
   }

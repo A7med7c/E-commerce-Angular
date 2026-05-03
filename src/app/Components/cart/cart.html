@@ -1,4 +1,4 @@
-@if (cartDetails) {
+@if (cartDetails(); as cartDetails) {
 <section class="container">
     <div class="d-flex align-items-center justify-content-between">
         <div>
@@ -7,7 +7,7 @@
             <p class=" text-main">Total Price:{{cartDetails.totalCartPrice | currency: "GBP"}}</p>
         </div>
         <div>
-            <button (click)="removeAllItems()" class="btn btn-outline-danger btn-sm" [disabled]="isCartEmpty">
+            <button (click)="removeAllItems()" class="btn btn-outline-danger btn-sm" [disabled]="isCartEmpty()">
                 Clear Cart
             </button>
         </div>
@@ -38,7 +38,7 @@
         </div>
     </div>
     }
-    <button [routerLink]="['/orders',cartDetails._id]" [disabled]="isCartEmpty" class="btn  btn-main mt-2">Place
+    <button [routerLink]="['/orders',cartDetails._id]" [disabled]="isCartEmpty()" class="btn  btn-main mt-2">Place
         Order</button>
 </section>
 }

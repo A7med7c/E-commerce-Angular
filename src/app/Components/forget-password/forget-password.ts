@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../Core/Services/auth-service';
@@ -14,14 +14,13 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ForgetPassword {
 
-  isLoading: boolean = false;
-  showPassword: boolean = false;
-  step: number = 1;
+  readonly isLoading = signal(false);
+  readonly showPassword = signal(false);
+  readonly step = signal(1);
 
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _authService = inject(AuthService);
   private readonly _router = inject(Router);
-  private readonly _cdr = inject(ChangeDetectorRef);
   private readonly _toast = inject(ToastrService);
 
   verifyEmail: FormGroup = this._formBuilder.group({
@@ -38,27 +37,25 @@ export class ForgetPassword {
   })
 
   togglePassword() {
-    this.showPassword = !this.showPassword;
+    this.showPassword.update((value) => !value);
   }
 
   emailVerification(): void {
     if (this.verifyEmail.valid) {
-      this.isLoading = true;
+      this.isLoading.set(true);
       const email = this.verifyEmail.get('email')?.value;
       this.resetPassword.get('email')?.patchValue(email);
 
       this._authService.sendCode(this.verifyEmail.value).subscribe({
         next: (res) => {
-          this.isLoading = false;
-          this.step = 2;
+          this.isLoading.set(false);
+          this.step.set(2);
           this._toast.success(res.message || 'Code has sent  successfully');
-          this._cdr.detectChanges();
         },
         error: (err: HttpErrorResponse) => {
-          this.isLoading = false;
+          this.isLoading.set(false);
           this._toast.error(err.error?.message || 'Something went wrong');
           console.log(err.message);
-          this._cdr.detectChanges();
         }
       });
     } else {
@@ -69,20 +66,18 @@ export class ForgetPassword {
 
   codeVerification(): void {
     if (this.verifyCode.valid) {
-      this.isLoading = true;
+      this.isLoading.set(true);
 
       this._authService.codeVerification(this.verifyCode.value).subscribe({
         next: (res) => {
-          this.isLoading = false;
-          this.step = 3;
+          this.isLoading.set(false);
+          this.step.set(3);
           this._toast.success(res.message || 'Successfull code');
-          this._cdr.detectChanges();
         },
         error: (err: HttpErrorResponse) => {
-          this.isLoading = false;
+          this.isLoading.set(false);
           this._toast.error(err.error?.message || 'Something went wrong');
           console.log(err.message);
-          this._cdr.detectChanges();
         }
       });
     } else {
@@ -93,17 +88,16 @@ export class ForgetPassword {
 
   resetPasswordVerification(): void {
     if (this.resetPassword.valid) {
-      this.isLoading = true;
+      this.isLoading.set(true);
 
       this._authService.setNewPassword(this.resetPassword.value).subscribe({
         next: (res) => {
-          this.isLoading = false;
+          this.isLoading.set(false);
           this._toast.success(res.message || 'Password reste complete successfully');
 
           // Store token immediately
           localStorage.setItem('token', res.token);
           this._authService.saveUserData();
-          this._cdr.detectChanges();
 
           // Brief delay for UX (optional)
           setTimeout(() => {
@@ -111,10 +105,9 @@ export class ForgetPassword {
           }, 100);
         },
         error: (err: HttpErrorResponse) => {
-          this.isLoading = false;
+          this.isLoading.set(false);
           this._toast.error(err.error?.message || 'Something went wrong');
           console.log(err.message);
-          this._cdr.detectChanges();
         }
       });
     } else {
