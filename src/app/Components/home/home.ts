@@ -13,10 +13,12 @@ import { Subscription } from 'rxjs';
 import { CartService } from '../../Core/Services/cart-service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslatePipe } from '@ngx-translate/core';
+import { WishListService } from '../../Core/Services/wish-list-service';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [CarouselModule, RouterLink, SearchPipe, FormsModule, TranslatePipe],
+  imports: [CarouselModule, RouterLink, SearchPipe, FormsModule, TranslatePipe, NgClass],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -29,6 +31,7 @@ export class Home implements OnInit, OnDestroy {
   private readonly _cartService = inject(CartService)
   private readonly _destroyRef = inject(DestroyRef)
   private readonly _toastrService = inject(ToastrService)
+  private readonly _wishListService = inject(WishListService)
 
   readonly productList = signal<IProducts[]>([])
   readonly categoryList = signal<ICategory[]>([])
@@ -37,6 +40,7 @@ export class Home implements OnInit, OnDestroy {
   searchText: string = ''
   productSubs!: Subscription
   cartItemsNumber: number = 0;
+  wishlistIds = new Set<string>();
 
 
   customOptionsCategory: OwlOptions = {
@@ -111,13 +115,46 @@ export class Home implements OnInit, OnDestroy {
     this._cartService.addToCart(id).subscribe({
       next: (res) => {
         console.log(res);
-        this._toastrService.success(
-          res.message || 'Product added successfully'
-        );
+        this._toastrService.success(res.message || 'Product added successfully');
         this._cartService.itemsNumber.set(res.numOfCartItems);
         console.log(this.cartItemsNumber)
       }
     })
+  }
 
+  addToWishList(id: string): void {
+    this._wishListService.addToWishList(id).subscribe({
+      next: (res) => {
+        this._toastrService.success(res.message || 'Product added successfully')
+        console.log(res.message)
+      }
+    })
+  }
+  loadWishlist() {
+    this._wishListService.getUserWishList().subscribe((res: any) => {
+      const ids = res.data.map((item: any) => item._id);
+      this.wishlistIds = new Set(ids);
+    });
+  }
+
+  isInWishlist(productId: string): boolean {
+    return this.wishlistIds.has(productId);
+  }
+
+  toggleWishlist(productId: string) {
+
+    if (this.isInWishlist(productId)) {
+
+      this._wishListService.removeFromWishlist(productId).subscribe(() => {
+        this.wishlistIds.delete(productId);
+      });
+
+    } else {
+
+      this._wishListService.addToWishList(productId).subscribe(() => {
+        this.wishlistIds.add(productId);
+      });
+
+    }
   }
 }

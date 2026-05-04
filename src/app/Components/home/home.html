@@ -83,7 +83,23 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-main w-100" (click)="addToCart(product.id)">Add To Cart</button>
+                <div class="action-buttons mt-2">
+
+                    <!-- 🛒 Add to Cart -->
+                    <button class="action-btn cart-btn" (click)="addToCart(product.id)">
+
+                        <i class="fa fa-shopping-cart"></i>
+                    </button>
+
+                    <!-- ❤️ / 💔 Wishlist -->
+                    <button class="action-btn fav-btn" (click)="toggleWishlist(product.id)">
+
+                        <i class="fa" [ngClass]="isInWishlist(product.id) ? 'fa-heart-broken' : 'fa-heart'">
+                        </i>
+
+                    </button>
+
+                </div>
             </div>
         </div>
         }

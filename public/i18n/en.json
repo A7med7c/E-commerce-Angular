@@ -40,5 +40,15 @@
     "loginSuccess": "Welcome to Fresh Cart",
     "loginError": "Login failed, please try again"
     }
+  },
+  "wishlist": {
+    "title": "Wishlist",
+    "loading": "Loading wishlist...",
+    "empty": "Your wishlist is empty",
+    "emptyDescription": "Add products you like to see them here.",
+    "addToCart": "Add to Cart",
+    "remove": "Remove from Wishlist",
+    "sold": "Sold",
+    "ratings": "Ratings"
   }
 }
